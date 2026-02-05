@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REDE INC.io | Alexandre Freire</title>
+    <style>
+        body { background: #050505; color: #e0e0e0; font-family: 'Courier New', monospace; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; overflow: hidden; }
+        .panel { border: 1px solid #333; padding: 40px; background: #0a0a0a; box-shadow: 0 0 40px rgba(0,123,255,0.15); border-radius: 5px; text-align: center; width: 450px; position: relative; }
+        h1 { font-size: 1.2rem; letter-spacing: 5px; color: #007bff; margin-bottom: 10px; }
+        .arquiteto-tag { font-size: 10px; color: #555; letter-spacing: 3px; margin-bottom: 30px; }
+        .balance { font-size: 2.5rem; font-weight: bold; margin: 20px 0; color: #fff; cursor: pointer; transition: 0.3s; }
+        .balance:hover { color: #007bff; text-shadow: 0 0 15px #007bff; }
+        .nano-container { margin-top: 30px; text-align: left; }
+        .nano-label { display: flex; justify-content: space-between; font-size: 10px; color: #007bff; margin-bottom: 8px; letter-spacing: 1px; }
+        .bar-bg { width: 100%; height: 4px; background: #1a1a1a; border-radius: 2px; }
+        #nano-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #007bff, #00ff41); transition: width 0.5s ease; box-shadow: 0 0 10px #007bff; }
+        .status-msg { font-size: 9px; color: #444; margin-top: 10px; text-transform: uppercase; }
+        
+        #manifesto-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.97); z-index: 10; padding: 50px; box-sizing: border-box; overflow-y: auto; border-top: 4px solid #007bff; }
+        .manifesto-text { max-width: 800px; margin: 0 auto; line-height: 1.8; font-size: 1.1rem; color: #00ff41; text-shadow: 0 0 5px rgba(0,255,65,0.3); }
+        .close-btn { color: #ff4141; cursor: pointer; font-size: 12px; letter-spacing: 2px; margin-bottom: 40px; display: block; text-decoration: underline; }
+        h2 { color: #fff; letter-spacing: 3px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="panel">
+        <h1>REDE INC.io</h1>
+        <div class="arquiteto-tag">ARQUITETO: ALEXANDRE FREIRE</div>
+        
+        <div id="saldo-txt" class="balance" onclick="abrirManifesto()">0.00 INC</div>
+        <p style="font-size: 9px; color: #444;">CLIQUE NO SALDO PARA O MANIFESTO</p>
+
+        <div class="nano-container">
+            <div class="nano-label">
+                <span>SINCRONIA NANO-ATÔMICA</span>
+                <span id="nano-percent">...</span>
+            </div>
+            <div class="bar-bg">
+                <div id="nano-bar"></div>
+            </div>
+            <div class="status-msg" id="fluxo-status">SINC_AUTO_ATIVA</div>
+        </div>
+    </div>
+
+    <div id="manifesto-overlay">
+        <span class="close-btn" onclick="fecharManifesto()">[ VOLTAR_AO_DASHBOARD ]</span>
+        <div class="manifesto-text">
+            <h2>MANIFESTO DA VERDADEIRA DEMOCRACIA</h2>
+            <p>> A REDE INC.io não é apenas software; é a convergência entre a biologia e a soberania digital.</p>
+            <p>> O poder não será mais delegado; será exercido através da integridade atômica.</p>
+            <p>> Cada nó desta rede é um guardião da liberdade humana.</p>
+            <p>> O código é a lei, e a lei agora protege o indivíduo.</p>
+            <br>
+            <p style="color: #007bff; font-size: 1.3rem;">// ASSINADO: ALEXANDRE FREIRE</p>
+            <p style="color: #333; font-size: 10px;">ID_GENÉTICO: VERIFICADO_FÓRMULA_FREIRE</p>
+        </div>
+    </div>
+
+    <script>
+        async function atualizarSistema() {
+            try {
+                const resposta = await fetch('/api/nano_status');
+                const dados = await resposta.json();
+                
+                // ATUALIZAÇÃO EM TEMPO REAL
+                document.getElementById('saldo-txt').innerText = dados.saldo.toFixed(2) + " INC";
+                document.getElementById('nano-percent').innerText = dados.integridade + "%";
+                document.getElementById('nano-bar').style.width = dados.integridade + "%";
+                
+                // DINÂMICA DE STATUS
+                const status = document.getElementById('fluxo-status');
+                if(dados.integridade >= 99.98) {
+                    status.innerText = "PICO DE ESTABILIDADE: MINERANDO...";
+                    status.style.color = "#00ff41";
+                } else {
+                    status.innerText = "SINC_AUTO_ATIVA // ANALISANDO MATÉRIA";
+                    status.style.color = "#444";
+                }
+                
+            } catch (e) { console.log("Conexão com o Núcleo interrompida."); }
+        }
+
+        function abrirManifesto() { document.getElementById('manifesto-overlay').style.display = 'block'; }
+        function fecharManifesto() { document.getElementById('manifesto-overlay').style.display = 'none'; }
+
+        // Intervalo de 1 segundo para o saldo subir rápido conforme a mineração
+        setInterval(atualizarSistema, 1000);
+        atualizarSistema();
+    </script>
+
+</body>
+</html>
+EOF 
