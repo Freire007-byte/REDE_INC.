@@ -1,16 +1,17 @@
-from fastapi import FastAPI
-from fastapi.responses import FileResponse
-import os
+import time
 
-app = FastAPI()
+# Data de início da REDE INC (5 de Fevereiro de 2026)
+START_TIME = 1738756800 
 
-# Rota para o Painel Visual
-@app.get("/")
-async def read_index():
-    # Isso busca o arquivo na pasta web
-    return FileResponse('web/index.html')
-
-# Sua rota de API existente
 @app.get("/api/nano_status")
 async def nano_status():
-    return {"saldo": 100.0, "integridade": 99.98} # Exemplo
+    agora = time.time()
+    # Ganha 0.01 INC por segundo desde o início
+    saldo_atual = (agora - START_TIME) * 0.01 
+    # A integridade oscila levemente para simular a entropia
+    integridade = 99.90 + (time.time() % 0.09) 
+    
+    return {
+        "saldo": round(saldo_atual, 2),
+        "integridade": round(integridade, 2)
+    }
