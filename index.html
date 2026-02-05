@@ -3,83 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REDE INC.io | QUANTUM PORTAL</title>
+    <title>REDE INC.io | QUANTUM CITY</title>
     <style>
-        :root { --blue: #80ebff; --green: #39ff14; --gold: #ffd700; }
-        body { background: #000; color: #fff; font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; margin: 0; overflow: hidden; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        :root { --blue: #80ebff; --green: #39ff14; --dark: #0a0c10; }
+        body { background: var(--dark); color: #fff; font-family: "Segoe UI", sans-serif; margin: 0; overflow: hidden; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
         
-        /* Fundo Dinâmico (Cidade e Bots) */
-        #canvas-bots { position: fixed; top: 0; left: 0; z-index: 1; opacity: 0.5; }
+        /* Fundo da Cidade Futurista em CSS */
+        .city-bg { position: fixed; width: 100%; height: 100%; z-index: 1; background: linear-gradient(to bottom, #001525 0%, #0a0c10 100%); }
+        .tower { position: absolute; bottom: 0; width: 80px; height: 70vh; background: linear-gradient(to top, #050505, #102030); border-top: 2px solid var(--blue); box-shadow: 0 0 30px rgba(0,212,255,0.2); }
+        .tower.left { left: 5%; clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%); }
+        .tower.right { right: 5%; clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%); }
         
-        .portal-container { position: relative; z-index: 10; width: 100%; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle, rgba(0, 50, 80, 0.4) 0%, transparent 70%); }
+        /* O Grande Anel da Imagem */
+        .ring-container { position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; }
+        .main-ring { width: 450px; height: 450px; border: 15px solid rgba(128, 235, 255, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 100px rgba(0, 212, 255, 0.1); border-top: 15px solid var(--blue); border-bottom: 15px solid var(--blue); animation: spin 10s linear infinite; }
 
-        /* O Anel Quântico */
-        .quantum-ring { position: absolute; width: 550px; height: 550px; border: 8px double var(--blue); border-radius: 50%; box-shadow: 0 0 50px rgba(0, 212, 255, 0.5), inset 0 0 50px rgba(0, 212, 255, 0.3); animation: rotate 20s linear infinite; }
-
-        /* Painel Central de Código */
-        .code-display { position: relative; width: 400px; padding: 30px; background: rgba(0, 20, 40, 0.7); border: 2px solid var(--blue); border-radius: 10px; backdrop-filter: blur(10px); text-align: left; box-shadow: 0 0 30px rgba(0, 212, 255, 0.4); }
-        .code-header { color: var(--green); font-size: 0.7em; margin-bottom: 10px; border-bottom: 1px solid rgba(128, 235, 255, 0.2); padding-bottom: 5px; }
-        .math-formula { font-family: "Courier New", monospace; font-size: 1.4em; color: #fff; margin: 15px 0; text-align: center; }
-
-        /* Dados de Performance (TPS / BYTES) */
-        .data-stats { display: flex; justify-content: space-around; width: 100%; margin-top: 20px; font-weight: bold; letter-spacing: 2px; }
+        /* Painel Central Flutuante */
+        .glass-panel { position: absolute; width: 320px; padding: 25px; background: rgba(0, 20, 40, 0.8); border: 1px solid var(--blue); border-radius: 5px; backdrop-filter: blur(15px); text-align: center; box-shadow: 0 0 40px rgba(0, 212, 255, 0.5); z-index: 20; }
+        .formula { font-family: "Courier New", monospace; color: #fff; font-size: 1.2em; margin: 15px 0; }
+        
+        /* Dados da Base da Imagem */
+        .stats-footer { position: absolute; bottom: -80px; width: 100%; display: flex; justify-content: space-around; }
+        .stat-item { text-align: center; }
+        .stat-val { display: block; font-size: 1.2em; font-weight: bold; }
         .tps { color: var(--green); text-shadow: 0 0 10px var(--green); }
         .bytes { color: var(--blue); text-shadow: 0 0 10px var(--blue); }
 
-        /* Títulos */
-        .main-title { position: absolute; top: 10%; text-align: center; letter-spacing: 3px; }
-        .main-title h1 { font-size: 1.2em; margin: 0; text-transform: uppercase; }
-        .main-title p { font-size: 0.7em; color: var(--blue); margin-top: 10px; }
+        .header-text { position: absolute; top: -120px; width: 500px; text-align: center; }
+        .header-text h1 { font-size: 1em; letter-spacing: 2px; margin: 0; color: #fff; }
+        .header-text p { font-size: 0.7em; color: var(--blue); }
 
-        .saldo-float { font-size: 2.5em; font-weight: bold; color: #fff; text-shadow: 0 0 20px var(--blue); margin-top: 20px; }
-
-        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
-    <canvas id="canvas-bots"></canvas>
+    <div class="city-bg">
+        <div class="tower left"></div>
+        <div class="tower right"></div>
+    </div>
 
-    <div class="portal-container">
-        <div class="main-title">
-            <h1>REDE INC.io - DIGITAL LIBERATION</h1>
-            <p>Arquiteto & Criador: Alexandre Freire</p>
+    <div class="ring-container">
+        <div class="header-text">
+            <h1>OFFIONOUNEMENT: REDE INC.io - DIGITAL LIBERATION</h1>
+            <p>Qquiteto & Criador: Alexandre Freire</p>
         </div>
 
-        <div class="quantum-ring"></div>
+        <div class="main-ring"></div>
 
-        <div class="code-display">
-            <div class="code-header"># REDE_INC_CORE_V4_STABLE</div>
-            <div class="math-formula">
-                f(x) = ∑ 1-ⁿ aᵢ xᵢ mod(√q)
-            </div>
-            <div style="font-size: 0.6em; color: rgba(255,255,255,0.5); line-height: 1.5;">
+        <div class="glass-panel">
+            <div style="font-size: 0.6em; color: var(--green);"># REDE_INC_CORE_V4_STABLE</div>
+            <div class="formula">f(x) = ∑ 1-ⁿ aᵢ xᵢ mod(√q)</div>
+            <div style="font-size: 0.55em; color: #80ebff; line-height: 1.6;">
                 > SCANNING CORE... STATUS: SOVEREIGN<br>
-                > LATENCY: <span id="lat">0ms</span> | ACCESS: <span id="vis">28514</span>
+                > LATENCY: <span id="lat">0ms</span> | VIS: <span id="vis">28514</span>
             </div>
+            <div style="font-size: 1.8em; font-weight: bold; margin-top: 15px;" id="saldo">0.00 INC</div>
         </div>
 
-        <div class="saldo-float" id="saldo">0.00 INC</div>
-
-        <div class="data-stats">
-            <div class="tps">5000 TPS</div>
-            <div class="bytes">2500 BYTES</div>
+        <div class="stats-footer">
+            <div class="stat-item"><span class="stat-val tps">5000 TPS</span></div>
+            <div class="stat-item"><span class="stat-val bytes">2500 BYTES</span></div>
         </div>
     </div>
 
     <script>
-        const canvas = document.getElementById("canvas-bots");
-        const ctx = canvas.getContext("2d");
-        let particles = [];
-        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-        class Bot {
-            constructor() { this.x = Math.random()*canvas.width; this.y = Math.random()*canvas.height; this.size = Math.random()*2; this.speedX = (Math.random()-0.5)*1.2; this.speedY = (Math.random()-0.5)*1.2; }
-            update() { this.x += this.speedX; this.y += this.speedY; if(this.x<0||this.x>canvas.width)this.x=canvas.width; if(this.y<0||this.y>canvas.height)this.y=canvas.height; }
-            draw() { ctx.fillStyle = Math.random() > 0.5 ? "#80ebff" : "#39ff14"; ctx.beginPath(); ctx.arc(this.x,this.y,this.size,0,Math.PI*2); ctx.fill(); }
-        }
-        for(let i=0;i<150;i++) particles.push(new Bot());
-        function anim() { ctx.clearRect(0,0,canvas.width,canvas.height); particles.forEach(p=>{p.update();p.draw();}); requestAnimationFrame(anim); }
-        anim();
-
         async function update() {
             const t0 = performance.now();
             try {
