@@ -3,158 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>INC.NEXUS | EXCHANGE</title>
+    <title>INC.NEXUS | GLOBAL PAY</title>
     <style>
-        :root { --bg: #0b0e11; --card: #1e2329; --yellow: #fcd535; --green: #02c076; --red: #cf304a; --blue: #00aaff; --text: #eaecef; --dim: #848e9c; }
-        * { box-sizing: border-box; font-family: "SF Pro Display", "Inter", sans-serif; -webkit-tap-highlight-color: transparent; }
+        :root { --bg: #0b0e11; --card: #1e2329; --yellow: #fcd535; --green: #02c076; --red: #cf304a; --text: #eaecef; --dim: #848e9c; --input: #2b3139; }
+        * { box-sizing: border-box; font-family: "SF Pro Display", sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: var(--text); margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
         
-        /* HEADER ESTILO BINANCE */
-        header { background: var(--bg); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #2b3139; }
-        .user-id { font-size: 0.7em; color: var(--dim); background: #2b3139; padding: 4px 8px; border-radius: 4px; }
-
-        /* NAVEGAÇÃO SUPERIOR */
-        nav { display: flex; background: var(--bg); border-bottom: 1px solid #2b3139; overflow-x: auto; }
-        .nav-link { padding: 14px 20px; font-size: 0.75em; font-weight: 600; color: var(--dim); cursor: pointer; white-space: nowrap; transition: 0.2s; }
+        header { background: var(--bg); padding: 15px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--input); }
+        nav { display: flex; background: var(--bg); border-bottom: 1px solid var(--input); overflow-x: auto; }
+        .nav-link { padding: 14px 20px; font-size: 0.75em; font-weight: 600; color: var(--dim); cursor: pointer; white-space: nowrap; }
         .nav-link.active { color: var(--yellow); border-bottom: 2px solid var(--yellow); }
 
         #main { flex: 1; overflow-y: auto; padding: 16px; }
-        .page { display: none; animation: fadeIn 0.3s ease; }
-        .active-page { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* CARDS E LISTAS */
+        .page { display: none; } .active-page { display: block; }
         .card { background: var(--card); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
-        .label { font-size: 0.7em; color: var(--dim); margin-bottom: 8px; }
-        .big-val { font-size: 1.8em; font-weight: bold; margin-bottom: 4px; }
         
-        .market-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #2b3139; }
-        .symbol { font-weight: bold; font-size: 0.9em; }
-        .change-pos { color: var(--green); font-size: 0.8em; }
+        /* INPUTS ESTILO BINANCE */
+        .input-group { background: var(--input); border-radius: 8px; padding: 12px; margin-bottom: 15px; }
+        .input-label { font-size: 0.6em; color: var(--dim); text-transform: uppercase; margin-bottom: 5px; }
+        input { background: none; border: none; color: #fff; width: 100%; font-size: 1.1em; outline: none; }
         
-        /* TRADE BUTTONS */
-        .btn-buy { background: var(--green); color: #fff; border: none; padding: 12px; border-radius: 4px; font-weight: bold; flex: 1; cursor: pointer; }
-        .btn-sell { background: var(--red); color: #fff; border: none; padding: 12px; border-radius: 4px; font-weight: bold; flex: 1; cursor: pointer; }
+        /* BOTÕES DE AÇÃO */
+        .btn-pay { background: var(--yellow); color: #000; border: none; padding: 18px; border-radius: 8px; font-weight: 800; cursor: pointer; width: 100%; text-transform: uppercase; margin-top: 10px; }
+        .btn-pay:active { transform: scale(0.98); }
+
+        /* MODAL DE CARTÃO */
+        #card-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+        .checkout-box { background: var(--card); border-radius: 20px; width: 100%; max-width: 400px; padding: 25px; border: 1px solid #333; }
         
-        /* FOOTER TAB BAR */
-        .tab-bar { background: #181a20; display: flex; border-top: 1px solid #2b3139; padding-bottom: 10px; }
-        .tab-item { flex: 1; padding: 12px; text-align: center; font-size: 0.6em; color: var(--dim); cursor: pointer; }
-        .tab-item.active { color: var(--yellow); }
+        /* STATUS DE REDE */
+        .telemetry { font-size: 0.55em; color: var(--green); font-family: monospace; display: flex; gap: 10px; padding: 5px 15px; background: #000; }
     </style>
 </head>
 <body>
 
+    <div class="telemetry">
+        <span>LATENCY: <b id="lat">14ms</b></span>
+        <span>TPS: <b id="tps">402.1</b></span>
+        <span>SVP_SHIELD: <b>ACTIVE</b></span>
+    </div>
+
     <header>
-        <div style="font-weight: 900; color: var(--yellow); font-size: 1.2em;">INC</div>
-        <div class="user-id" id="uid">UID: ---</div>
+        <div style="font-weight: 900; color: var(--yellow);">INC<span style="color:#fff">.NEXUS</span></div>
+        <div id="uid-tag" style="font-size: 0.65em; color: var(--dim);">UID: 882910</div>
     </header>
 
     <nav>
         <div class="nav-link active" onclick="tab('market', this)">Mercados</div>
-        <div class="nav-link" onclick="tab('trade', this)">Trade</div>
         <div class="nav-link" onclick="tab('wallet', this)">Carteira</div>
         <div class="nav-link" onclick="tab('gov', this)">Governança</div>
     </nav>
 
     <div id="main">
-        
         <div id="market" class="page active-page">
             <div class="card">
-                <div class="label">Destaque INC/USDT</div>
-                <div class="big-val" style="color:var(--green)">$ 5.2632</div>
-                <div class="change-pos">+8.42% (24h)</div>
+                <div style="font-size:0.6em; color:var(--dim);">PREÇO ATUAL INC</div>
+                <div style="font-size:2.2em; font-weight:bold; color:var(--green);">$ 5.26</div>
             </div>
-            <div class="label">Principais Moedas</div>
-            <div id="market-list">
-                <div class="market-item"><span>BTC/INC</span><span style="text-align:right;"><b>12.441,12</b><br><span class="change-pos">+1.2%</span></span></div>
-                <div class="market-item"><span>ETH/INC</span><span style="text-align:right;"><b>642,88</b><br><span class="change-pos">+2.4%</span></span></div>
-                <div class="market-item"><span>EUR/INC</span><span style="text-align:right;"><b>5,26</b><br><span style="color:var(--dim)">0.00%</span></span></div>
-                <div class="market-item"><span>BRL/INC</span><span style="text-align:right;"><b>0,95</b><br><span style="color:var(--red)">-0.12%</span></span></div>
-            </div>
-        </div>
-
-        <div id="trade" class="page">
-            <div class="card">
-                <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
-                    <button class="btn-buy" style="margin-right:5px;">COMPRAR</button>
-                    <button class="btn-sell" style="opacity:0.5;">VENDER</button>
+            <button class="btn-pay" onclick="openCheckout()">Comprar com Cartão</button>
+            <div style="margin-top:20px;">
+                <div style="display:flex; justify-content:space-between; padding:15px 0; border-bottom:1px solid #2b3139;">
+                    <span>BTC / INC</span><b>12.450,00</b>
                 </div>
-                <div class="label">Quantia</div>
-                <input type="number" id="trade-val" style="width:100%; background:#2b3139; border:none; color:#fff; padding:15px; border-radius:4px; font-size:1.2em; outline:none;" placeholder="0.00">
-                <div style="display:flex; justify-content:space-between; font-size:0.7em; margin-top:10px;">
-                    <span color="var(--dim)">Disponível:</span>
-                    <span color="var(--text)">10.000.000 INC</span>
+                <div style="display:flex; justify-content:space-between; padding:15px 0; border-bottom:1px solid #2b3139;">
+                    <span>ETH / INC</span><b>682,10</b>
                 </div>
-                <button class="btn-buy" style="width:100%; margin-top:20px; background:var(--green)" onclick="confirmTrade()">COMPRAR INC</button>
             </div>
         </div>
 
         <div id="wallet" class="page">
             <div class="card">
-                <div class="label">Equivalente em Dólar</div>
-                <div class="big-val" id="total-usd">$ 0.00</div>
-                <div style="font-size:0.75em; color:var(--dim)">≈ 0.00000000 BTC</div>
+                <div style="font-size:0.6em; color:var(--dim);">SALDO TOTAL ESTIMADO</div>
+                <div id="total-val" style="font-size:2.2em; font-weight:bold;">$ 0.00</div>
             </div>
             <div class="card">
-                <div class="label">Ativos no Cofre</div>
-                <div class="market-item"><span>INC Coin</span><b id="wal-inc">0.00</b></div>
-                <div class="market-item"><span>Bitcoin</span><b id="wal-btc">0.0000</b></div>
-                <div class="market-item"><span>Dólar (USDT)</span><b id="wal-usd">0.00</b></div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:15px;"><span>INC Coin</span><b id="bal-inc">0.00</b></div>
+                <div style="display:flex; justify-content:space-between;"><span>Bitcoin</span><b id="bal-btc">0.0000</b></div>
             </div>
         </div>
 
         <div id="gov" class="page">
             <div class="card" style="border-left: 4px solid var(--yellow);">
-                <div class="label" style="color:var(--yellow)">Taxa de Governança (2%)</div>
-                <div class="big-val" id="wal-gov">0.00 INC</div>
-                <p style="font-size:0.65em; color:var(--dim);">Fundos retidos para manutenção da segurança quântica de 2.500 bits sob custódia de Alexandre Freire.</p>
+                <div style="font-size:0.6em; color:var(--yellow);">TAXA DE GOVERNANÇA ACUMULADA (2%)</div>
+                <div id="bal-gov" style="font-size:1.8em; font-weight:bold; color:var(--yellow);">$ 0.00</div>
+                <p style="font-size:0.6em; color:var(--dim); margin-top:10px;">Custódia Alexandre Freire - Grade Lattice 2.500 bits.</p>
             </div>
         </div>
-
     </div>
 
-    <div class="tab-bar">
-        <div class="tab-item active" onclick="tab('market', this)">Início</div>
-        <div class="tab-item" onclick="tab('market', this)">Mercados</div>
-        <div class="tab-item" onclick="tab('trade', this)">Trade</div>
-        <div class="tab-item" onclick="tab('wallet', this)">Carteira</div>
+    <div id="card-modal">
+        <div class="checkout-box">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <h3 style="margin:0; font-size:1em;">Pagamento Seguro</h3>
+                <span onclick="closeCheckout()" style="cursor:pointer; color:var(--dim);">✕</span>
+            </div>
+            
+            <div class="input-group">
+                <div class="input-label">Valor do Aporte (USD)</div>
+                <input type="number" id="pay-amt" placeholder="100.00" oninput="updatePrev()">
+            </div>
+
+            <div class="input-group">
+                <div class="input-label">Número do Cartão</div>
+                <input type="text" placeholder="0000 0000 0000 0000">
+            </div>
+
+            <div style="display:flex; gap:10px;">
+                <div class="input-group" style="flex:1;">
+                    <div class="input-label">Validade</div>
+                    <input type="text" placeholder="MM/AA">
+                </div>
+                <div class="input-group" style="flex:1;">
+                    <div class="input-label">CVV</div>
+                    <input type="password" placeholder="***">
+                </div>
+            </div>
+
+            <div id="pay-summary" style="font-size:0.7em; color:var(--dim); margin:10px 0;">
+                Crédito: 0.00 INC | Taxa Gov: 0.00 USD
+            </div>
+
+            <button class="btn-pay" onclick="processPayment()">Pagar Agora</button>
+            <div style="text-align:center; margin-top:15px;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" width="40" style="margin:0 5px; opacity:0.5;">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" width="30" style="margin:0 5px; opacity:0.5;">
+            </div>
+        </div>
     </div>
 
     <script>
-        let userData = JSON.parse(localStorage.getItem('inc_exchange')) || { inc: 0, btc: 0, usd: 0, gov: 0, uid: Math.floor(100000 + Math.random() * 900000) };
+        let db = JSON.parse(localStorage.getItem('inc_v20')) || { inc: 0, gov: 0 };
 
-        function tab(p, el) {
-            document.querySelectorAll('.page').forEach(x => x.classList.remove('active-page'));
-            document.querySelectorAll('.nav-link, .tab-item').forEach(x => x.classList.remove('active'));
-            document.getElementById(p).classList.add('active-page');
+        function tab(id, el) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+            document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+            document.getElementById(id).classList.add('active-page');
             el.classList.add('active');
         }
 
-        function sync() {
-            document.getElementById('uid').innerText = "UID: " + userData.uid;
-            document.getElementById('wal-inc').innerText = userData.inc.toFixed(2);
-            document.getElementById('wal-btc').innerText = userData.btc.toFixed(4);
-            document.getElementById('wal-usd').innerText = userData.usd.toFixed(2);
-            document.getElementById('wal-gov').innerText = userData.gov.toFixed(2);
-            document.getElementById('total-usd').innerText = "$ " + (userData.inc * 5.26 + userData.usd).toFixed(2);
-            localStorage.setItem('inc_exchange', JSON.stringify(userData));
+        function openCheckout() { document.getElementById('card-modal').style.display = 'flex'; }
+        function closeCheckout() { document.getElementById('card-modal').style.display = 'none'; }
+
+        function updatePrev() {
+            let v = document.getElementById('pay-amt').value || 0;
+            document.getElementById('pay-summary').innerText = `Crédito: ${(v * 0.98).toFixed(2)} INC | Taxa Gov: ${(v * 0.02).toFixed(2)} USD`;
         }
 
-        function confirmTrade() {
-            let val = parseFloat(document.getElementById('trade-val').value);
-            if(!val) return alert("Insira um valor.");
+        function processPayment() {
+            let v = parseFloat(document.getElementById('pay-amt').value);
+            if(!v) return;
             
-            // Lógica: Ele gasta "dólar fictício" para ganhar INC
-            let fee = val * 0.02;
-            let credit = val * 0.98;
-            userData.inc += credit;
-            userData.gov += fee;
-            alert("Ordem de compra executada! Fee de 2% processado.");
-            sync();
-            tab('wallet', document.querySelectorAll('.nav-link')[2]);
+            document.querySelector('.btn-pay').innerText = "PROCESSANDO...";
+            setTimeout(() => {
+                db.inc += (v * 0.98);
+                db.gov += (v * 0.02);
+                localStorage.setItem('inc_v20', JSON.stringify(db));
+                alert("PAGAMENTO APROVADO! INC creditado no seu cofre.");
+                location.reload();
+            }, 3000);
         }
 
-        sync();
+        window.onload = () => {
+            document.getElementById('bal-inc').innerText = db.inc.toFixed(2);
+            document.getElementById('bal-gov').innerText = "$ " + db.gov.toFixed(2);
+            document.getElementById('total-val').innerText = "$ " + (db.inc * 5.26).toFixed(2);
+            
+            setInterval(() => {
+                document.getElementById('lat').innerText = (12 + Math.random() * 5).toFixed(0) + "ms";
+                document.getElementById('tps').innerText = (390 + Math.random() * 20).toFixed(1);
+            }, 2000);
+        };
     </script>
 </body>
 </html>
