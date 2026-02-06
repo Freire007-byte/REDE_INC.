@@ -3,136 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>INC.NEXUS | GLOBAL PAY</title>
+    <title>INC.OS | NEXUS_CORE_v21</title>
     <style>
-        :root { --bg: #0b0e11; --card: #1e2329; --yellow: #fcd535; --green: #02c076; --red: #cf304a; --text: #eaecef; --dim: #848e9c; --input: #2b3139; }
+        :root { --bg: #030303; --card: #0d0d0d; --blue: #00aaff; --green: #39ff14; --gold: #ffae00; --red: #ff3e3e; --text: #f0f0f0; --dim: #555; }
         * { box-sizing: border-box; font-family: "SF Pro Display", sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: var(--text); margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+        body { background: var(--bg); color: var(--text); margin: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
         
-        header { background: var(--bg); padding: 15px; display: flex; justify-content: space-between; border-bottom: 1px solid var(--input); }
-        nav { display: flex; background: var(--bg); border-bottom: 1px solid var(--input); overflow-x: auto; }
-        .nav-link { padding: 14px 20px; font-size: 0.75em; font-weight: 600; color: var(--dim); cursor: pointer; white-space: nowrap; }
-        .nav-link.active { color: var(--yellow); border-bottom: 2px solid var(--yellow); }
+        /* HEADER TELEMETRIA */
+        .telemetry { background: #000; padding: 10px 15px; border-bottom: 1px solid #111; display: flex; justify-content: space-between; font-family: monospace; font-size: 0.55em; letter-spacing: 1px; }
+        .telemetry b { color: var(--green); }
 
-        #main { flex: 1; overflow-y: auto; padding: 16px; }
-        .page { display: none; } .active-page { display: block; }
-        .card { background: var(--card); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+        header { background: #0a0a0a; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; }
         
-        /* INPUTS ESTILO BINANCE */
-        .input-group { background: var(--input); border-radius: 8px; padding: 12px; margin-bottom: 15px; }
-        .input-label { font-size: 0.6em; color: var(--dim); text-transform: uppercase; margin-bottom: 5px; }
-        input { background: none; border: none; color: #fff; width: 100%; font-size: 1.1em; outline: none; }
-        
-        /* BOTÕES DE AÇÃO */
-        .btn-pay { background: var(--yellow); color: #000; border: none; padding: 18px; border-radius: 8px; font-weight: 800; cursor: pointer; width: 100%; text-transform: uppercase; margin-top: 10px; }
-        .btn-pay:active { transform: scale(0.98); }
+        nav { display: flex; background: #000; border-bottom: 1px solid #222; overflow-x: auto; }
+        .nav-link { flex: 1; padding: 15px; text-align: center; font-size: 0.65em; color: var(--dim); cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+        .nav-link.active { color: var(--blue); border-bottom: 2px solid var(--blue); background: rgba(0,170,255,0.05); }
 
-        /* MODAL DE CARTÃO */
-        #card-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
-        .checkout-box { background: var(--card); border-radius: 20px; width: 100%; max-width: 400px; padding: 25px; border: 1px solid #333; }
-        
-        /* STATUS DE REDE */
-        .telemetry { font-size: 0.55em; color: var(--green); font-family: monospace; display: flex; gap: 10px; padding: 5px 15px; background: #000; }
+        #main-view { flex: 1; overflow-y: auto; padding: 15px; }
+        .page { display: none; animation: slideUp 0.3s ease; }
+        .active-page { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* CARDS */
+        .card { background: var(--card); border: 1px solid #1a1a1a; border-radius: 16px; padding: 20px; margin-bottom: 15px; }
+        .label { font-size: 0.6em; color: var(--dim); text-transform: uppercase; margin-bottom: 10px; }
+        .val { font-size: 2em; font-weight: 900; letter-spacing: -1px; }
+
+        /* LISTA DE MERCADO */
+        .m-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #111; }
+        .m-sym { font-weight: bold; font-size: 0.9em; }
+        .m-price { text-align: right; }
+        .btn-buy-small { background: var(--green); color: #000; border: none; padding: 6px 12px; border-radius: 4px; font-weight: bold; font-size: 0.7em; cursor: pointer; }
+
+        /* CHECKOUT MODAL */
+        #checkout { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+        .c-box { background: var(--card); border: 1px solid var(--blue); border-radius: 24px; width: 100%; max-width: 400px; padding: 25px; }
+        .c-input { background: #000; border: 1px solid #222; border-radius: 8px; padding: 15px; color: #fff; width: 100%; margin: 10px 0; outline: none; }
+        .btn-pay { background: var(--blue); color: #000; border: none; padding: 20px; border-radius: 12px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; margin-top: 15px; }
     </style>
 </head>
 <body>
 
     <div class="telemetry">
-        <span>LATENCY: <b id="lat">14ms</b></span>
-        <span>TPS: <b id="tps">402.1</b></span>
-        <span>SVP_SHIELD: <b>ACTIVE</b></span>
+        <span>LATENCY: <b id="lat">-- ms</b></span>
+        <span>TPS: <b id="tps">--</b></span>
+        <span>SVP_CORE: <b>ACTIVE</b></span>
     </div>
 
     <header>
-        <div style="font-weight: 900; color: var(--yellow);">INC<span style="color:#fff">.NEXUS</span></div>
-        <div id="uid-tag" style="font-size: 0.65em; color: var(--dim);">UID: 882910</div>
+        <div style="font-weight:900; letter-spacing:1px; color:var(--blue);">INC<span style="color:#fff">.NEXUS</span></div>
+        <div id="addr-tag" style="font-size:0.5em; color:var(--dim); background:#111; padding:4px 8px; border-radius:4px;">ID: UNLINKED</div>
     </header>
 
     <nav>
-        <div class="nav-link active" onclick="tab('market', this)">Mercados</div>
-        <div class="nav-link" onclick="tab('wallet', this)">Carteira</div>
+        <div class="nav-link active" onclick="tab('market', this)">Mercado</div>
+        <div class="nav-link" onclick="tab('wal', this)">Carteira</div>
         <div class="nav-link" onclick="tab('gov', this)">Governança</div>
     </nav>
 
-    <div id="main">
+    <div id="main-view">
         <div id="market" class="page active-page">
-            <div class="card">
-                <div style="font-size:0.6em; color:var(--dim);">PREÇO ATUAL INC</div>
-                <div style="font-size:2.2em; font-weight:bold; color:var(--green);">$ 5.26</div>
+            <div class="card" style="text-align:center;">
+                <div class="label">Cotação INC / Global</div>
+                <div class="val" style="color:var(--green);">$ 5.2632</div>
+                <button class="btn-pay" style="margin-top:15px; padding:15px;" onclick="openPay()">Comprar INC Instantâneo</button>
             </div>
-            <button class="btn-pay" onclick="openCheckout()">Comprar com Cartão</button>
-            <div style="margin-top:20px;">
-                <div style="display:flex; justify-content:space-between; padding:15px 0; border-bottom:1px solid #2b3139;">
-                    <span>BTC / INC</span><b>12.450,00</b>
-                </div>
-                <div style="display:flex; justify-content:space-between; padding:15px 0; border-bottom:1px solid #2b3139;">
-                    <span>ETH / INC</span><b>682,10</b>
-                </div>
+            <div class="label">Pares Disponíveis</div>
+            <div class="card">
+                <div class="m-item"><div class="m-sym">BTC / INC</div><div class="m-price"><b>12.441,12</b><br><small style="color:var(--green)">+1.2%</small></div></div>
+                <div class="m-item"><div class="m-sym">ETH / INC</div><div class="m-price"><b>682,50</b><br><small style="color:var(--green)">+0.8%</small></div></div>
+                <div class="m-item"><div class="m-sym">BRL / INC</div><div class="m-price"><b>0,95</b><br><small style="color:var(--red)">-0.2%</small></div></div>
             </div>
         </div>
 
-        <div id="wallet" class="page">
+        <div id="wal" class="page">
             <div class="card">
-                <div style="font-size:0.6em; color:var(--dim);">SALDO TOTAL ESTIMADO</div>
-                <div id="total-val" style="font-size:2.2em; font-weight:bold;">$ 0.00</div>
+                <div class="label">Saldo Estimado (FIAT)</div>
+                <div id="total-fiat" class="val">$ 0.00</div>
             </div>
             <div class="card">
-                <div style="display:flex; justify-content:space-between; margin-bottom:15px;"><span>INC Coin</span><b id="bal-inc">0.00</b></div>
-                <div style="display:flex; justify-content:space-between;"><span>Bitcoin</span><b id="bal-btc">0.0000</b></div>
+                <div class="label">Meus Ativos</div>
+                <div class="m-item"><span>INC Coin</span><b id="b-inc">0.00</b></div>
+                <div class="m-item"><span>Bitcoin</span><b id="b-btc">0.0000</b></div>
+                <div class="m-item"><span>Ethereum</span><b id="b-eth">0.000</b></div>
             </div>
         </div>
 
         <div id="gov" class="page">
-            <div class="card" style="border-left: 4px solid var(--yellow);">
-                <div style="font-size:0.6em; color:var(--yellow);">TAXA DE GOVERNANÇA ACUMULADA (2%)</div>
-                <div id="bal-gov" style="font-size:1.8em; font-weight:bold; color:var(--yellow);">$ 0.00</div>
-                <p style="font-size:0.6em; color:var(--dim); margin-top:10px;">Custódia Alexandre Freire - Grade Lattice 2.500 bits.</p>
+            <div class="card" style="border-left: 4px solid var(--gold);">
+                <div class="label" style="color:var(--gold);">Taxa de Governança (2%)</div>
+                <div id="b-gov" class="val" style="color:var(--gold);">$ 0.00</div>
+                <p style="font-size:0.65em; color:var(--dim); margin-top:15px; line-height:1.5;">
+                    Custódia soberana Alexandre Freire. Os fundos são destinados à integridade da Grade Lattice de 2.500 bits contra ataques quânticos.
+                </p>
             </div>
         </div>
     </div>
 
-    <div id="card-modal">
-        <div class="checkout-box">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-                <h3 style="margin:0; font-size:1em;">Pagamento Seguro</h3>
-                <span onclick="closeCheckout()" style="cursor:pointer; color:var(--dim);">✕</span>
+    <div id="checkout">
+        <div class="c-box">
+            <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
+                <b style="color:var(--blue)">CHECKOUT SEGURO</b>
+                <span onclick="closePay()" style="cursor:pointer;">✕</span>
             </div>
+            <div class="label">Valor do Aporte (USD)</div>
+            <input type="number" id="p-amt" class="c-input" placeholder="100.00" oninput="calc()">
+            <div id="p-res" style="font-size:0.7em; color:var(--dim); margin-bottom:15px;">Recebe: 0.00 INC | Taxa: 0.00 USD</div>
             
-            <div class="input-group">
-                <div class="input-label">Valor do Aporte (USD)</div>
-                <input type="number" id="pay-amt" placeholder="100.00" oninput="updatePrev()">
-            </div>
-
-            <div class="input-group">
-                <div class="input-label">Número do Cartão</div>
-                <input type="text" placeholder="0000 0000 0000 0000">
-            </div>
-
+            <div class="label">Cartão de Crédito</div>
+            <input type="text" class="c-input" placeholder="0000 0000 0000 0000">
             <div style="display:flex; gap:10px;">
-                <div class="input-group" style="flex:1;">
-                    <div class="input-label">Validade</div>
-                    <input type="text" placeholder="MM/AA">
-                </div>
-                <div class="input-group" style="flex:1;">
-                    <div class="input-label">CVV</div>
-                    <input type="password" placeholder="***">
-                </div>
+                <input type="text" class="c-input" style="flex:1" placeholder="MM/AA">
+                <input type="password" class="c-input" style="flex:1" placeholder="CVV">
             </div>
-
-            <div id="pay-summary" style="font-size:0.7em; color:var(--dim); margin:10px 0;">
-                Crédito: 0.00 INC | Taxa Gov: 0.00 USD
-            </div>
-
-            <button class="btn-pay" onclick="processPayment()">Pagar Agora</button>
-            <div style="text-align:center; margin-top:15px;">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" width="40" style="margin:0 5px; opacity:0.5;">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" width="30" style="margin:0 5px; opacity:0.5;">
-            </div>
+            <button class="btn-pay" style="background:var(--green)" onclick="confirmPay()">Autorizar Pagamento</button>
         </div>
     </div>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('inc_v20')) || { inc: 0, gov: 0 };
+        let db = JSON.parse(localStorage.getItem('inc_v21')) || { inc: 0, btc: 0, eth: 0, gov: 0, addr: "INC_8x"+Math.random().toString(16).slice(2,10).toUpperCase() };
 
         function tab(id, el) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
@@ -141,35 +130,32 @@
             el.classList.add('active');
         }
 
-        function openCheckout() { document.getElementById('card-modal').style.display = 'flex'; }
-        function closeCheckout() { document.getElementById('card-modal').style.display = 'none'; }
+        function openPay() { document.getElementById('checkout').style.display='flex'; }
+        function closePay() { document.getElementById('checkout').style.display='none'; }
 
-        function updatePrev() {
-            let v = document.getElementById('pay-amt').value || 0;
-            document.getElementById('pay-summary').innerText = `Crédito: ${(v * 0.98).toFixed(2)} INC | Taxa Gov: ${(v * 0.02).toFixed(2)} USD`;
+        function calc() {
+            let v = document.getElementById('p-amt').value || 0;
+            document.getElementById('p-res').innerText = `Recebe: ${(v*0.98).toFixed(2)} INC | Taxa: ${(v*0.02).toFixed(2)} USD`;
         }
 
-        function processPayment() {
-            let v = parseFloat(document.getElementById('pay-amt').value);
+        function confirmPay() {
+            let v = parseFloat(document.getElementById('p-amt').value);
             if(!v) return;
-            
-            document.querySelector('.btn-pay').innerText = "PROCESSANDO...";
-            setTimeout(() => {
-                db.inc += (v * 0.98);
-                db.gov += (v * 0.02);
-                localStorage.setItem('inc_v20', JSON.stringify(db));
-                alert("PAGAMENTO APROVADO! INC creditado no seu cofre.");
-                location.reload();
-            }, 3000);
+            db.inc += (v * 0.98);
+            db.gov += (v * 0.02);
+            localStorage.setItem('inc_v21', JSON.stringify(db));
+            alert("SUCESSO: Liquidez integrada à Rede INC.");
+            location.reload();
         }
 
         window.onload = () => {
-            document.getElementById('bal-inc').innerText = db.inc.toFixed(2);
-            document.getElementById('bal-gov').innerText = "$ " + db.gov.toFixed(2);
-            document.getElementById('total-val').innerText = "$ " + (db.inc * 5.26).toFixed(2);
+            document.getElementById('addr-tag').innerText = "ID: " + db.addr;
+            document.getElementById('b-inc').innerText = db.inc.toFixed(2);
+            document.getElementById('b-gov').innerText = "$ " + db.gov.toFixed(2);
+            document.getElementById('total-fiat').innerText = "$ " + (db.inc * 5.26).toFixed(2);
             
             setInterval(() => {
-                document.getElementById('lat').innerText = (12 + Math.random() * 5).toFixed(0) + "ms";
+                document.getElementById('lat').innerText = (12 + Math.random() * 5).toFixed(0) + " ms";
                 document.getElementById('tps').innerText = (390 + Math.random() * 20).toFixed(1);
             }, 2000);
         };
