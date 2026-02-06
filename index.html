@@ -19,38 +19,39 @@
         .card-title { font-size: 0.85em; font-weight: bold; color: #888; margin-bottom: 20px; }
         
         .big-value { font-size: 2.2em; font-weight: bold; color: var(--blue); transition: 0.8s ease; }
-        .mining-active { color: var(--green) !important; text-shadow: 0 0 20px var(--green); }
+        .sync-active { color: var(--green) !important; text-shadow: 0 0 15px var(--green); }
 
         .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:9999; align-items:center; justify-content:center; backdrop-filter:blur(15px); }
-        .modal-box { background:#0a0a0a; border: 1px solid var(--blue); padding:40px; border-radius:8px; max-width:500px; width:90%; color:#fff; text-align: center; }
+        .modal-box { background:#0a0a0a; border: 1px solid var(--blue); padding:40px; border-radius:8px; max-width:500px; width:90%; text-align: center; }
         .wallet-key { background:#000; padding:15px; border:1px solid #333; color:var(--green); font-family:monospace; word-break:break-all; font-size:0.7em; margin:20px 0; border-left: 4px solid var(--green); }
-        .confirm-btn { background:var(--blue); color:#000; border:none; padding:15px; cursor:pointer; font-weight:bold; width:100%; border-radius: 4px; font-size: 1em; }
+        .confirm-btn { background:var(--blue); color:#000; border:none; padding:15px; cursor:pointer; font-weight:bold; width:100%; border-radius: 4px; font-size: 1em; transition: 0.3s; }
+        .confirm-btn:hover { background: var(--green); }
     </style>
 </head>
 <body>
 
     <div class="sidebar">
         <div class="logo">INC<span style="color:var(--blue)">.OS</span></div>
-        <div class="status-item">STATUS DE REDE<b id="node-status">NÚCLEO ONLINE</b></div>
+        <div class="status-item">STATUS DE REDE<b id="node-status">STANDBY</b></div>
         <div class="status-item">LATÊNCIA REDE<b id="lat">0ms</b></div>
         <div class="status-item">PULSOS ATIVOS<b id="vis">37333</b></div>
         <button onclick="document.getElementById(\"manifesto\").style.display=\"flex\"" style="background:none; border:1px solid #333; color:#555; padding:8px; border-radius:4px; width:100%; margin-top:10px; cursor:pointer; font-size:0.7em;">PROTOCOLO</button>
     </div>
 
     <div class="main-content">
-        <div class="card"><div class="card-title">Ativos Totais</div><div class="big-value" id="saldo">0.00 INC</div></div>
-        <div class="card"><div class="card-title">Sincronia Lattice</div><div class="big-value" id="sync-status">99.98%</div></div>
+        <div class="card"><div class="card-title">Ativos Totais</div><div class="big-value" id="saldo">OFFLINE</div></div>
+        <div class="card"><div class="card-title">Sincronia Lattice</div><div class="big-value" id="sync-status">0.00%</div></div>
 
         <div class="card" style="grid-column: span 2;">
-            <div class="card-title">Gerador de Chave Atômica (2500 Bits)</div>
+            <div class="card-title">Chave Atômica de 2500 Bits (Fórmula Freire)</div>
             <div style="display:flex; gap:30px; align-items:center;">
                 <div onclick="abrirCofre()" style="cursor:pointer; background:#fff; padding:5px; border-radius:4px; width:80px; height:80px;">
                     <img id="qr-img" src="" style="width:100%;">
                 </div>
                 <div style="font-size:0.8em;">
-                    <div>USER_ID: <span id="user-id" style="color:#fff">ARCHITECT_DEFAULT</span></div>
-                    <div style="margin-top:5px;">SEC_LEVEL: <span id="sec-lvl" style="color:var(--blue)">STANDBY</span></div>
-                    <button onclick="abrirCofre()" style="margin-top:10px; background:var(--blue); border:none; color:#000; padding:8px 15px; font-weight:bold; cursor:pointer; border-radius:4px;">CRIAR CARTEIRA</button>
+                    <div>IDENTIDADE: <span id="user-id" style="color:#fff">AGUARDANDO_AUTORIZACAO</span></div>
+                    <div style="margin-top:5px;">COFRE: <span id="sec-lvl" style="color:var(--blue)">BLOQUEADO</span></div>
+                    <button onclick="abrirCofre()" style="margin-top:10px; background:var(--blue); border:none; color:#000; padding:10px 20px; font-weight:bold; cursor:pointer; border-radius:4px;">GERAR CHAVE 2500</button>
                 </div>
             </div>
         </div>
@@ -58,46 +59,45 @@
 
     <div id="walletModal" class="modal">
         <div class="modal-box">
-            <h2 style="color:var(--blue); margin:0;">COFRE ATÔMICO</h2>
-            <p style="font-size:0.8em; color:#666;">n=2500 bits de entropia gerados via Fórmula Freire.</p>
-            <div class="wallet-key" id="final-key">INC_2500_...</div>
-            <button class="confirm-btn" onclick="executarSincronizacao()">CONFIRMAR E SINCRONIZAR</button>
+            <h2 style="color:var(--blue); margin:0;">GERAÇÃO DE CHAVE</h2>
+            <p style="font-size:0.8em; color:#666;">Injetando entropia baseada em grades (SVP).</p>
+            <div class="wallet-key" id="final-key">...</div>
+            <button class="confirm-btn" id="btnSinc" onclick="finalizarSincronia()">CONFIRMAR E SINCRONIZAR</button>
         </div>
     </div>
 
     <div id="manifesto" class="modal">
         <div class="modal-box">
-            <h3>MANIFESTO INC</h3>
-            <p style="font-size:0.8em; text-align:left;">f(x) = ∑ aᵢ xᵢ mod(q) | n=2500<br><br>Soberania Digital inquebrável.</p>
+            <h3 style="color:var(--blue)">MANIFESTO SOBERANO</h3>
+            <p style="font-size:0.8em; line-height:1.6;">f(x) = ∑ aᵢ xᵢ mod(q) | n=2500<br><br>A matemática protege a liberdade onde as leis falham.</p>
             <button class="confirm-btn" onclick="document.getElementById(\"manifesto\").style.display=\"none\"">FECHAR</button>
         </div>
     </div>
 
     <script>
-        let chaveGerada = "";
+        let chaveMestra = "";
+        let sincronizado = false;
 
         function abrirCofre() {
-            chaveGerada = "INC_2500_" + Math.random().toString(16).slice(2, 18).toUpperCase() + Math.random().toString(16).slice(2, 18).toUpperCase();
-            document.getElementById("final-key").innerText = chaveGerada;
+            chaveMestra = "INC_2500_" + Math.random().toString(16).slice(2, 18).toUpperCase() + Math.random().toString(16).slice(2, 18).toUpperCase();
+            document.getElementById("final-key").innerText = chaveMestra;
             document.getElementById("walletModal").style.display = "flex";
         }
 
-        function executarSincronizacao() {
-            // Fechar modal
+        function finalizarSincronia() {
+            sincronizado = true;
             document.getElementById("walletModal").style.display = "none";
-            // Alterar Dashboard
-            document.getElementById("user-id").innerText = chaveGerada.substring(0, 16) + "...";
-            document.getElementById("sec-lvl").innerText = "LATTICE_ENCRYPTED";
+            document.getElementById("user-id").innerText = chaveMestra.substring(0, 16) + "...";
+            document.getElementById("sec-lvl").innerText = "LATTICE_ACTIVE";
             document.getElementById("sec-lvl").style.color = "var(--green)";
             document.getElementById("sync-status").innerText = "100.00%";
-            document.getElementById("sync-status").classList.add("mining-active");
-            document.getElementById("saldo").classList.add("mining-active");
-            document.getElementById("node-status").innerText = "MODO SOBERANO ATIVO";
+            document.getElementById("sync-status").classList.add("sync-active");
+            document.getElementById("saldo").classList.add("sync-active");
+            document.getElementById("node-status").innerText = "MODO SOBERANO";
             document.getElementById("node-status").style.color = "var(--green)";
-            
-            console.log("Sincronia concluída com a chave: " + chaveGerada);
-            alert("SINCRONIZAÇÃO COMPLETA
-Chave de 2500 bits injetada no núcleo.");
+            update();
+            alert("SINCRONIA ESTABELECIDA
+Chave Atômica vinculada ao Núcleo.");
         }
 
         async function update() {
@@ -105,7 +105,9 @@ Chave de 2500 bits injetada no núcleo.");
             try {
                 const r = await fetch("/api/nano_status");
                 const d = await r.json();
-                document.getElementById("saldo").innerText = d.saldo.toLocaleString("en-US", {minimumFractionDigits: 2}) + " INC";
+                if (sincronizado) {
+                    document.getElementById("saldo").innerText = d.saldo.toLocaleString("en-US", {minimumFractionDigits: 2}) + " INC";
+                }
                 document.getElementById("vis").innerText = d.visitas;
                 document.getElementById("lat").innerText = Math.round(performance.now() - t0) + "ms";
             } catch(e) {}
