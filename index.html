@@ -3,80 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CORE_v4_STABLE_INC</title>
+    <title>INC.OS | SOVEREIGN_DASHBOARD</title>
     <style>
-        :root { --blue: #80ebff; --green: #39ff14; --bg: #000; }
-        body { 
-            margin: 0; padding: 0; 
-            background: #000 url("https://r.jina.ai/i/54056247754d8004b772f9f1f0a28f8f") no-repeat center center fixed; 
-            background-size: cover; 
-            font-family: "Courier New", monospace; 
-            height: 100vh; overflow: hidden; color: var(--blue);
-            display: flex; align-items: center; justify-content: center;
-        }
-
-        /* Menu Protocolo - Acesso Restrito */
-        .sidebar {
-            position: fixed; left: -300px; top: 0; width: 300px; height: 100%;
-            background: rgba(0, 0, 0, 0.98); border-right: 1px solid var(--blue);
-            transition: 0.4s; z-index: 1000; padding: 30px; box-sizing: border-box;
-        }
-        .sidebar.active { left: 0; }
-
-        .menu-btn {
-            position: fixed; top: 20px; left: 20px; z-index: 1001;
-            background: transparent; border: 1px solid var(--blue); color: var(--blue);
-            padding: 8px 15px; cursor: pointer; font-size: 0.6em; letter-spacing: 3px;
-        }
-
-        /* Painel Central - Apenas o Ativo e a Fórmula */
-        .main-panel {
-            background: rgba(0, 0, 0, 0.9); border: 1px solid rgba(128, 235, 255, 0.2);
-            padding: 40px; border-radius: 2px; text-align: center;
-            backdrop-filter: blur(15px); z-index: 10; width: 380px;
-            box-shadow: 0 0 50px rgba(0,0,0,1);
-        }
-
-        .formula-core { color: var(--green); font-size: 0.85em; margin-bottom: 30px; letter-spacing: 1px; }
-        .saldo-box { font-size: 2.6em; font-weight: bold; margin: 10px 0; color: #fff; text-shadow: 0 0 20px var(--blue); }
+        :root { --bg: #0d0d0d; --card-bg: #141414; --blue: #00aaff; --text: #e0e0e0; --dim: #555; }
+        body { background: var(--bg); color: var(--text); font-family: "Segoe UI", Tahoma, sans-serif; margin: 0; padding: 20px; display: grid; grid-template-columns: 250px 1fr; gap: 20px; }
         
-        .stats-grid { 
-            display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
-            margin-top: 35px; border-top: 1px solid #1a1a1a; padding-top: 25px;
-            font-size: 0.6em; text-align: left; opacity: 0.8;
-        }
-        .stat-label { color: #444; display: block; margin-bottom: 5px; letter-spacing: 1px; }
-        .stat-value { color: var(--blue); font-weight: bold; }
+        /* Barra Lateral de Status */
+        .sidebar { background: var(--card-bg); padding: 20px; border-radius: 12px; border: 1px solid #222; height: calc(100vh - 80px); }
+        .logo { font-size: 1.8em; font-weight: bold; color: #fff; margin-bottom: 30px; border-bottom: 2px solid var(--blue); padding-bottom: 10px; }
+        .status-item { font-size: 0.7em; margin-bottom: 15px; color: var(--dim); letter-spacing: 1px; }
+        .status-item b { color: var(--blue); display: block; font-size: 1.1em; margin-top: 3px; }
+
+        /* Grid de Conteúdo Principal */
+        .main-content { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .card { background: var(--card-bg); border-radius: 12px; border: 1px solid #222; padding: 20px; position: relative; }
+        .card-title { font-size: 0.85em; font-weight: bold; color: #888; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        
+        /* Valores e Gráficos Simulados */
+        .big-value { font-size: 2.2em; font-weight: bold; color: var(--blue); margin-bottom: 10px; }
+        .chart-placeholder { width: 100%; height: 100px; background: linear-gradient(90deg, transparent 0%, rgba(0,170,255,0.1) 50%, transparent 100%); border-bottom: 1px solid #333; position: relative; overflow: hidden; }
+        .chart-placeholder::after { content: ""; position: absolute; bottom: 10px; left: 0; width: 100%; height: 40px; border-top: 2px solid var(--blue); opacity: 0.4; }
+
+        /* Tabela de Transferência */
+        table { width: 100%; border-collapse: collapse; font-size: 0.7em; margin-top: 10px; }
+        th { text-align: left; color: var(--dim); padding: 8px; border-bottom: 1px solid #222; }
+        td { padding: 8px; border-bottom: 1px solid #1a1a1a; }
+        .tag-status { color: var(--blue); font-weight: bold; }
+
+        /* Protocolo/Manifesto */
+        .btn-protocol { background: var(--blue); color: #000; border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 20px; font-size: 0.8em; }
     </style>
 </head>
 <body>
 
-    <button class="menu-btn" onclick="document.getElementById(\"side\").classList.toggle(\"active\")">☰ PROTOCOLO</button>
+    <div class="sidebar">
+        <div class="logo">INC<span style="color:var(--blue)">.OS</span></div>
+        <div class="status-item">STATUS DE REDE<b>NÚCLEO ONLINE</b></div>
+        <div class="status-item">LATÊNCIA REDE<b id="lat">0ms</b></div>
+        <div class="status-item">PULSOS ATIVOS<b id="vis">0</b></div>
+        <div class="status-item">ASSINATURA<b>VALIDADA</b></div>
+        <button class="btn-protocol" onclick="alert(\"PROTOCOLO SOBERANO ATIVO
 
-    <div class="sidebar" id="side">
-        <h3 style="color:var(--blue); font-size: 0.8em; letter-spacing: 2px;">IDENTIDADE SOBERANA</h3>
-        <p style="font-size: 0.65em; line-height: 2; color: #666; text-align: justify;">
-            ARQUITETO: ALEXANDRE FREIRE<br><br>
-            ESTA É A SOBERANIA DIGITAL DA NOVA ERA WEB 4.0. 
-            O CONTROLE DO TEMPO E DOS ATIVOS É EXECUTADO ATRAVÉS DESTA INTERFACE.
-            A MATEMÁTICA PROTEGE A LIBERDADE ONDE AS LEIS FALHAM.
-        </p>
-        <button onclick="document.getElementById(\"side\").classList.remove(\"active\")" style="background:none; border:1px solid #222; color:#444; cursor:pointer; font-size:0.5em; padding: 5px 10px; margin-top: 20px;">ENCERRAR_SESSÃO</button>
+Matemática: f(x) = ∑ aᵢ xᵢ mod(q)
+Segurança: Lattice 2500 bytes\")">ABRIR PROTOCOLO</button>
     </div>
 
-    <div class="main-panel">
-        <div class="formula-core">f(x) = ∑ aᵢ xᵢ mod(q) | n=2500</div>
-        <div class="saldo-box" id="saldo">0.00 INC</div>
-        
-        <div class="stats-grid">
-            <div>
-                <span class="stat-label">RED_LATENCY</span>
-                <span class="stat-value" id="lat">0ms</span>
+    <div class="main-content">
+        <div class="card">
+            <div class="card-title">Ativos Totais da Rede <span>●</span></div>
+            <div class="big-value" id="saldo">0.00 INC</div>
+            <div class="chart-placeholder"></div>
+            <div style="font-size:0.6em; color:#444; margin-top:10px;">FLUXO TEMPORAL DE MINERAÇÃO</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Estabilidade Quântica <span>●</span></div>
+            <div class="big-value">99.99<span style="font-size:0.4em">%</span></div>
+            <div class="chart-placeholder" style="filter: hue-rotate(90deg);"></div>
+            <div style="font-size:0.6em; color:#444; margin-top:10px;">INTEGRIDADE DO COFRE ATÔMICO</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Identidade Digital <span>●</span></div>
+            <div style="display:flex; gap:15px; align-items:center;">
+                <div style="width:60px; height:60px; background:#fff; padding:5px; border-radius:4px;"><img src="https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=INC-SOVEREIGN" style="width:100%"></div>
+                <div style="font-size:0.65em;">
+                    <div style="color:var(--dim)">USER ID: <span style="color:#fff">SOVEREIGN_ARCHITECT</span></div>
+                    <div style="color:var(--dim); margin-top:5px;">CHAVE: <span style="color:#fff">ATOMIC_LATTICE_007</span></div>
+                </div>
             </div>
-            <div>
-                <span class="stat-label">ACTIVE_PULSE</span>
-                <span class="stat-value" id="vis">28514</span>
-            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Últimos Pulsos de Rede <span>●</span></div>
+            <table>
+                <tr><th>DATA</th><th>DESTINO</th><th>VALOR</th></tr>
+                <tr><td>FEV 06</td><td>NÚCLEO_01</td><td class="tag-status">STABLE</td></tr>
+                <tr><td>FEV 06</td><td>GATE_2500</td><td class="tag-status">STABLE</td></tr>
+                <tr><td>FEV 06</td><td>SVP_SOLVER</td><td class="tag-status">ACTIVE</td></tr>
+            </table>
         </div>
     </div>
 
