@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>INC.ULTIMATE | REAL_TIME_ENGINE</title>
+    <title>INC.ULTIMATE | DYNAMIC_MARKET</title>
     <style>
         :root { --bg: #030303; --card: #0d0d0d; --blue: #00aaff; --green: #39ff14; --gold: #fcd535; --red: #ff3e3e; --text: #eaecef; --dim: #848e9c; }
         * { box-sizing: border-box; font-family: "SF Pro Display", sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: var(--text); margin: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
         
         .market-ticker { background: #000; padding: 8px 15px; border-bottom: 1px solid #1a1a1a; display: flex; gap: 20px; font-family: monospace; font-size: 0.6em; overflow-x: auto; white-space: nowrap; }
-        .ticker-item b { color: var(--green); transition: 0.3s; }
+        .ticker-item b { transition: 0.5s; }
 
         header { background: #0a0a0a; padding: 15px 20px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; }
         
@@ -21,10 +21,10 @@
         .card { background: var(--card); border: 1px solid #1a1a1a; border-radius: 12px; padding: 18px; margin-bottom: 12px; }
         .label { font-size: 0.55em; color: var(--dim); text-transform: uppercase; letter-spacing: 1px; }
         .val-main { font-size: 2.1em; font-weight: 900; color: var(--text); margin: 5px 0; }
-        
-        .order-book { font-family: monospace; font-size: 0.65em; }
-        .order-row { display: flex; justify-content: space-between; padding: 3px 0; }
-        .bid { color: var(--green); } .ask { color: var(--red); }
+        .price-up { color: var(--green) !important; }
+        .price-down { color: var(--red) !important; }
+
+        .btn-blue { background: var(--blue); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
 
         nav { background: #000; border-top: 1px solid #222; display: flex; position: fixed; bottom: 0; width: 100%; padding-bottom: env(safe-area-inset-bottom); }
         .nav-item { flex: 1; padding: 15px; text-align: center; font-size: 0.55em; color: var(--dim); cursor: pointer; text-transform: uppercase; }
@@ -34,81 +34,116 @@
 <body>
 
     <div class="market-ticker">
-        <span class="ticker-item">BTC/USD: <b id="price-btc">BUSCANDO...</b></span>
-        <span class="ticker-item">ETH/USD: <b id="price-eth">...</b></span>
-        <span class="ticker-item">INC/USD: <b>5.2632</b></span>
-        <span class="ticker-item">SVP_SHIELD: <b>ACTIVE</b></span>
+        <span class="ticker-item">BTC/USD: <b id="p-btc">...</b></span>
+        <span class="ticker-item">INC/USD: <b id="p-inc">5.2632</b></span>
+        <span class="ticker-item">SUPPLY: <b style="color:var(--gold)">10.0M</b></span>
+        <span class="ticker-item">NET: <b>LATTICE_ACTIVE</b></span>
     </div>
 
     <header>
         <div style="font-weight:900; color:var(--blue); font-size:1.2em;">INC<span style="color:#fff">.ULTIMATE</span></div>
-        <div style="font-size:0.5em; color:var(--green); border:1px solid var(--green); padding:2px 6px; border-radius:4px;">LIVE_DATA</div>
+        <div style="font-size:0.5em; color:var(--green); border:1px solid var(--green); padding:2px 6px; border-radius:4px;">MARKET_LIVE</div>
     </header>
 
     <div id="viewport">
         <div id="trade" class="page active-page">
             <div class="card">
-                <div class="label">Patrimônio em Tempo Real</div>
-                <div class="val-main" id="bal-total">$ 52,651.60</div>
-                <div style="display:flex; justify-content:space-between; font-size:0.6em; color:var(--green);">
-                    <span>CONEXÃO GLOBAL ATIVA</span><span id="bal-uid">ID: ---</span>
-                </div>
+                <div class="label">Preço Unitário INC</div>
+                <div class="val-main" id="inc-main-price">5.2632</div>
+                <div style="font-size:0.65em;" id="inc-change">Variação Orgânica: 0.00%</div>
             </div>
 
             <div class="card">
-                <div class="label">Order Book (Real-Time Stream)</div>
-                <div class="order-book" id="ob"></div>
+                <div class="label">Seu Saldo Protegido</div>
+                <div class="val-main" id="bal-usd" style="color:var(--text)">$ 52,632.00</div>
+                <div style="font-size:0.6em; color:var(--dim);">Calculado via LATTICE Node 2500</div>
+            </div>
+            
+            <button class="btn-blue" onclick="tab('pay')">Depositar & Valorizar</button>
+        </div>
+
+        <div id="pay" class="page">
+            <div class="card">
+                <div class="label">Injetar Liquidez na Rede</div>
+                <input type="number" id="amt" style="width:100%; background:#000; border:1px solid #333; padding:15px; border-radius:8px; color:#fff; margin:10px 0;" placeholder="Valor em USD">
+                <button class="btn-blue" onclick="process()">Confirmar Aporte</button>
             </div>
         </div>
     </div>
 
     <nav>
-        <div class="nav-item active">Exchange</div>
-        <div class="nav-item">Aporte</div>
-        <div class="nav-item">Cofre</div>
+        <div class="nav-item active" onclick="tab('trade', this)">Exchange</div>
+        <div class="nav-item" onclick="tab('pay', this)">Aporte</div>
         <div class="nav-item" onclick="location.reload()">Sair</div>
     </nav>
 
     <script>
-        // CONEXÃO COM O MERCADO REAL (API BINANCE)
-        const btcPrice = document.getElementById('price-btc');
-        const ethPrice = document.getElementById('price-eth');
-        
-        async function fetchPrices() {
-            try {
-                const res = await fetch('https://api.binance.com/api/v3/ticker/price?symbols=["BTCUSDT","ETHUSDT"]');
-                const data = await res.json();
-                
-                const btc = parseFloat(data[0].price).toLocaleString('en-US', {minimumFractionDigits: 2});
-                const eth = parseFloat(data[1].price).toLocaleString('en-US', {minimumFractionDigits: 2});
-                
-                btcPrice.innerText = btc;
-                ethPrice.innerText = eth;
-                genOB(parseFloat(data[0].price));
-            } catch (e) {
-                console.log("Erro de conexão");
-            }
-        }
-
-        function genOB(base) {
-            let html = '';
-            for(let i=0; i<4; i++) {
-                html += `<div class="order-row ask"><span>${(base + Math.random()*15).toFixed(2)}</span><span>${(Math.random()*2).toFixed(4)}</span></div>`;
-            }
-            html += `<div style="text-align:center; padding:5px; font-weight:bold; color:var(--blue); border-top:1px solid #222; border-bottom:1px solid #222; margin:5px 0;">${base.toFixed(2)} USD</div>`;
-            for(let i=0; i<4; i++) {
-                html += `<div class="order-row bid"><span>${(base - Math.random()*15).toFixed(2)}</span><span>${(Math.random()*2).toFixed(4)}</span></div>`;
-            }
-            document.getElementById('ob').innerHTML = html;
-        }
-
-        // Loop de Atualização Real (1 seg)
-        setInterval(fetchPrices, 1000);
-        window.onload = () => {
-            fetchPrices();
-            const db = JSON.parse(localStorage.getItem('inc_v38')) || { id: "INC_WG6220" };
-            document.getElementById('bal-uid').innerText = "ID: " + db.id;
+        let db = JSON.parse(localStorage.getItem('inc_v40')) || { 
+            usd: 52632.00, 
+            inc_price: 5.2632,
+            last_btc: 64000 
         };
+
+        async function updateMarket() {
+            try {
+                const res = await fetch('https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT');
+                const data = await res.json();
+                const btc = parseFloat(data.price);
+                
+                // Algoritmo: INC segue 5% da variação do BTC + variação interna
+                let btcChange = (btc - db.last_btc) / db.last_btc;
+                db.inc_price = db.inc_price * (1 + (btcChange * 0.05));
+                db.last_btc = btc;
+                
+                renderUI(btc);
+                localStorage.setItem('inc_v40', JSON.stringify(db));
+            } catch (e) { console.log("Offline"); }
+        }
+
+        function renderUI(btc) {
+            const pInc = document.getElementById('p-inc');
+            const mainPrice = document.getElementById('inc-main-price');
+            
+            // Visual de variação
+            if(db.inc_price > parseFloat(mainPrice.innerText)) {
+                mainPrice.className = "val-main price-up";
+            } else if (db.inc_price < parseFloat(mainPrice.innerText)) {
+                mainPrice.className = "val-main price-down";
+            }
+
+            pInc.innerText = db.inc_price.toFixed(4);
+            mainPrice.innerText = db.inc_price.toFixed(4);
+            document.getElementById('p-btc').innerText = btc.toLocaleString();
+            document.getElementById('bal-usd').innerText = "$ " + db.usd.toLocaleString();
+            
+            let change = ((db.inc_price - 5.2632) / 5.2632 * 100).toFixed(4);
+            document.getElementById('inc-change').innerText = `Variação Orgânica: ${change}%`;
+            document.getElementById('inc-change').style.color = change >= 0 ? 'var(--green)' : 'var(--red)';
+        }
+
+        function process() {
+            let val = parseFloat(document.getElementById('amt').value);
+            if(!val) return;
+            // Cada aporte sobe o preço da INC em 0.01%
+            db.usd += val;
+            db.inc_price *= 1.0001; 
+            localStorage.setItem('inc_v40', JSON.stringify(db));
+            alert("Liquidez Injetada! O preço da INC subiu.");
+            tab('trade');
+            renderUI(db.last_btc);
+        }
+
+        function tab(id, el) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+            document.getElementById(id).classList.add('active-page');
+            if(el) {
+                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                el.classList.add('active');
+            }
+        }
+
+        setInterval(updateMarket, 3000);
+        window.onload = updateMarket;
     </script>
 </body>
 </html>
