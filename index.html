@@ -3,32 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>INC.NEXUS | REGISTRATION_OPEN</title>
+    <title>INC.OS | IDENTITY_GEN_v32</title>
     <style>
         :root { --bg: #020202; --card: #0a0a0a; --blue: #00aaff; --green: #39ff14; --gold: #ffae00; --text: #ffffff; --dim: #555; }
-        * { box-sizing: border-box; font-family: "SF Pro Display", "SF Mono", monospace; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; font-family: "SF Pro Display", sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: var(--text); margin: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
         
         header { background: #000; padding: 15px 20px; border-bottom: 2px solid var(--blue); display: flex; justify-content: space-between; align-items: center; }
         .net-status { font-size: 0.55em; color: var(--green); font-weight: bold; }
 
         nav { display: flex; background: #000; border-bottom: 1px solid #1a1a1a; }
-        .nav-link { flex: 1; padding: 18px; text-align: center; font-size: 0.6em; color: var(--dim); cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
-        .nav-link.active { color: var(--blue); border-bottom: 2px solid var(--blue); background: rgba(0,170,255,0.05); }
+        .nav-item { flex: 1; padding: 18px; text-align: center; font-size: 0.6em; color: var(--dim); cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+        .nav-item.active { color: var(--blue); border-bottom: 2px solid var(--blue); background: rgba(0,170,255,0.05); }
 
-        #viewport { flex: 1; overflow-y: auto; padding: 25px; padding-bottom: 100px; }
-        .page { display: none; } .active-page { display: block; animation: slideUp 0.4s ease; }
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        #viewport { flex: 1; overflow-y: auto; padding: 25px; }
+        .page { display: none; animation: fadeIn 0.3s ease; }
+        .active-page { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .hero-title { font-size: 2em; font-weight: 900; margin-bottom: 10px; line-height: 1; }
-        .hero-sub { font-size: 0.8em; color: var(--dim); margin-bottom: 30px; }
-
-        .input-group { margin-bottom: 20px; }
-        .input-group label { display: block; font-size: 0.6em; color: var(--blue); margin-bottom: 8px; text-transform: uppercase; }
-        input { width: 100%; background: #111; border: 1px solid #222; padding: 15px; border-radius: 8px; color: #fff; font-size: 1em; }
-        
-        .btn-main { background: var(--blue); color: #000; border: none; padding: 20px; border-radius: 12px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
         .card { background: var(--card); border: 1px solid #1a1a1a; border-radius: 20px; padding: 25px; margin-bottom: 20px; }
+        .input-group { margin-bottom: 20px; }
+        label { display: block; font-size: 0.6em; color: var(--blue); margin-bottom: 8px; text-transform: uppercase; }
+        input { width: 100%; background: #111; border: 1px solid #222; padding: 15px; border-radius: 8px; color: #fff; font-size: 1em; outline: none; }
+        
+        .btn-main { background: var(--blue); color: #000; border: none; padding: 20px; border-radius: 12px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; }
+        .btn-green { background: var(--green); color: #000; border: none; padding: 20px; border-radius: 12px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; }
     </style>
 </head>
 <body>
@@ -39,77 +38,64 @@
     </header>
 
     <nav>
-        <div class="nav-link active" onclick="tab('visitor', this)">Visitante</div>
-        <div class="nav-link" onclick="tab('create', this)">Criar Conta</div>
-        <div class="nav-link" onclick="tab('login', this)">Acessar</div>
+        <div class="nav-item active" onclick="tab('visit', this)">Visitante</div>
+        <div class="nav-item" onclick="tab('create', this)">Criar Conta</div>
+        <div class="nav-item" onclick="tab('login', this)">Acessar</div>
     </nav>
 
     <div id="viewport">
-        
-        <div id="visitor" class="page active-page">
-            <h1 class="hero-title">A Nova <span style="color:var(--blue)">Democracia</span> Financeira.</h1>
-            <p class="hero-sub">Junte-se à rede de proteção Lattice. 10 Milhões de INC, controle total e segurança de 2500 bits.</p>
-            
+        <div id="visit" class="page active-page">
+            <h1 style="font-size:2.2em; font-weight:900;">O Futuro é <span style="color:var(--blue)">Soberano</span>.</h1>
+            <p style="color:var(--dim); font-size:0.85em; margin-bottom:30px;">Entre para a rede de proteção Lattice de 2500 bits comandada por Alexandre Freire.</p>
             <div class="card">
-                <div style="font-size:0.7em; color:var(--gold); margin-bottom:10px;">POR QUE ENTRAR?</div>
-                <ul style="font-size:0.75em; padding-left:15px; color:#ccc;">
-                    <li style="margin-bottom:10px;">Ativos protegidos pelo SVP_SHIELD.</li>
-                    <li style="margin-bottom:10px;">Taxas de 2% revertidas em segurança.</li>
-                    <li>Independência total de bancos centrais.</li>
-                </ul>
+                <div style="color:var(--gold); font-size:0.6em; margin-bottom:10px;">SUPPLY TOTAL</div>
+                <div style="font-size:1.5em; font-weight:bold;">10,000,000 INC</div>
             </div>
-            <button class="btn-main" onclick="tab('create', document.querySelectorAll('.nav-link')[1])">Começar Agora</button>
+            <button class="btn-main" onclick="tab('create', document.querySelectorAll('.nav-item')[1])">Gerar Carteira Agora</button>
         </div>
 
         <div id="create" class="page">
-            <h1 class="hero-title">Criar <span style="color:var(--blue)">Carteira</span></h1>
-            <p class="hero-sub">Gere sua identidade única na rede global INC.</p>
-            
             <div class="card">
                 <div class="input-group">
-                    <label>Nome Completo do Soberano</label>
-                    <input type="text" id="reg-name" placeholder="Ex: Alexandre Freire">
+                    <label>Seu Nome de Soberano</label>
+                    <input type="text" id="user-name" placeholder="Ex: Alexandre Freire">
                 </div>
-                <div class="input-group">
-                    <label>E-mail de Vinculação</label>
-                    <input type="email" id="reg-email" placeholder="seu@email.com">
-                </div>
-                <button class="btn-main" style="background:var(--green);" onclick="generateWallet()">Gerar Identidade Atômica</button>
+                <button class="btn-green" onclick="createAccount()">Ativar Chave de 2500 bits</button>
             </div>
         </div>
 
         <div id="login" class="page">
-            <h1 class="hero-title">Acessar <span style="color:var(--blue)">Terminal</span></h1>
             <div class="card">
                 <div class="input-group">
-                    <label>ID da Carteira (Soberano)</label>
+                    <label>ID da Carteira</label>
                     <input type="text" placeholder="INC_XXXXXXXX">
                 </div>
-                <button class="btn-main">Entrar no Sistema</button>
+                <button class="btn-main">Entrar no Terminal</button>
             </div>
         </div>
-
     </div>
 
     <script>
         function tab(id, el) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-            document.querySelectorAll('.nav-link').forEach(n => n.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.getElementById(id).classList.add('active-page');
             el.classList.add('active');
         }
 
-        function generateWallet() {
-            const name = document.getElementById('reg-name').value;
-            if(!name) return alert("Por favor, insira seu nome.");
+        function createAccount() {
+            const name = document.getElementById('user-name').value;
+            if(!name) return alert("Insira um nome válido.");
             
-            const newID = "INC_" + Math.random().toString(36).substr(2, 9).toUpperCase();
-            alert(`SUCESSO!\n\nBem-vindo à Rede INC, ${name}.\nSua Identidade Soberana é: ${newID}\n\nSincronizando com os 2500 nós...`);
+            const id = "INC_" + Math.random().toString(36).substr(2, 9).toUpperCase();
             
-            // Simula o salvamento e redireciona
+            // Mensagem simplificada para evitar erro de terminal
+            alert("CARTEIRA CRIADA! Bem-vindo, " + name + ". Seu ID e: " + id + ". Guarde sua chave privada.");
+            
+            // Simula o redirecionamento
             setTimeout(() => {
-                location.reload(); 
-            }, 2000);
+                location.reload();
+            }, 1000);
         }
     </script>
 </body>
