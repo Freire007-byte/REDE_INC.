@@ -3,68 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>INC.OS | CMC_INDEX_LIVE</title>
+    <title>INC.OS | PRESS_RELEASE_OFFICIAL</title>
     <style>
-        :root { --bg: #020202; --blue: #00aaff; --green: #39ff14; --gold: #ffae00; --text: #ffffff; }
-        * { box-sizing: border-box; font-family: "SF Mono", monospace; }
-        body { background: var(--bg); color: var(--text); margin: 0; padding: 20px; display: flex; flex-direction: column; height: 100vh; }
+        :root { --bg: #030303; --card: #0a0a0a; --blue: #00aaff; --green: #39ff14; --gold: #ffae00; --text: #f0f0f0; --dim: #666; }
+        * { box-sizing: border-box; font-family: "SF Pro Display", sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: var(--text); margin: 0; padding: 20px; overflow-y: auto; line-height: 1.6; }
         
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .cmc-status { padding: 8px 15px; border-radius: 20px; font-size: 0.6em; font-weight: bold; background: rgba(255,174,0,0.1); color: var(--gold); border: 1px solid var(--gold); }
-        .cmc-status.live { background: rgba(57,255,20,0.1); color: var(--green); border: 1px solid var(--green); }
-
-        .audit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
-        .audit-card { background: #0a0a0a; border: 1px solid #1a1a1a; padding: 20px; border-radius: 16px; }
-        .label { font-size: 0.55em; color: #555; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
-        .val { font-size: 1.2em; font-weight: 900; color: var(--blue); }
-
-        #log-console { flex: 1; background: #000; border: 1px solid #222; border-radius: 12px; padding: 15px; font-size: 0.7em; color: var(--green); overflow-y: auto; line-height: 1.5; }
-        .syncing::after { content: '...'; animation: blink 1.5s infinite; }
-        @keyframes blink { 0% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 0; } }
+        .badge { background: var(--blue); color: #000; padding: 5px 12px; border-radius: 4px; font-size: 0.6em; font-weight: bold; text-transform: uppercase; }
+        h1 { font-size: 1.8em; font-weight: 900; margin: 20px 0 10px; color: #fff; letter-spacing: -1px; }
+        .meta { font-size: 0.7em; color: var(--dim); margin-bottom: 30px; border-bottom: 1px solid #222; padding-bottom: 10px; }
+        
+        .content { font-size: 0.95em; color: #ccc; text-align: justify; }
+        .quote { background: #000; border-left: 3px solid var(--blue); padding: 20px; font-style: italic; margin: 25px 0; color: #fff; }
+        
+        .card { background: var(--card); border: 1px solid #1a1a1a; border-radius: 16px; padding: 20px; margin-top: 40px; }
+        .btn-copy { background: var(--blue); color: #000; border: none; padding: 15px; border-radius: 8px; font-weight: 800; width: 100%; cursor: pointer; text-transform: uppercase; margin-top: 15px; }
+        
+        footer { margin-top: 50px; text-align: center; font-size: 0.6em; color: var(--dim); padding-bottom: 30px; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1 style="margin:0; font-size:1.4em;">INC<span style="color:var(--blue)">.CMC</span></h1>
-        <div id="cmc-state" class="cmc-status">INDEXING_IN_PROGRESS</div>
+    <div class="badge">COMUNICADO OFICIAL | PARA PUBLICAÇÃO IMEDIATA</div>
+    <h1>Alexandre Freire Anuncia a Ativação da Rede INC: A Nova Fronteira da Democracia Digital</h1>
+    
+    <div class="meta">
+        POR: REDE INC NEWSROOM | DATA: 06 DE FEVEREIRO DE 2026 | LOCAL: SÃO PAULO / GLOBAL
     </div>
 
-    <div class="audit-grid">
-        <div class="audit-card">
-            <div class="label">Market Cap Est.</div>
-            <div class="val">$ 52.6M</div>
+    <div class="content">
+        <p><b>SÃO PAULO</b> — O Arquiteto de sistemas <b>Alexandre Freire</b> oficializou hoje a listagem e ativação global da <b>Rede INC</b>. Projetada para ser a infraestrutura financeira definitiva, a INC combina uma escassez absoluta de 10 milhões de unidades com a proteção inédita da Grade Lattice de 2.500 bits.</p>
+
+        <div class="quote">
+            "Não estamos apenas lançando uma moeda, estamos estabelecendo a Verdadeira Democracia Financeira. A Rede INC é o porto seguro para o capital soberano, blindada contra a volatilidade institucional e a ameaça da computação quântica." <br>— <b>Alexandre Freire</b>, Arquiteto Chefe.
         </div>
-        <div class="audit-card">
-            <div class="label">Circulating Supply</div>
-            <div class="val">10.0M INC</div>
-        </div>
+
+        <p>Diferente dos modelos tradicionais, a Rede INC introduz o conceito de <b>Cofre de Governança</b>. Toda liquidez injetada no ecossistema contribui com uma taxa fixa de 2%, destinada exclusivamente à manutenção e expansão dos 2.500 nós mestres que garantem a segurança atômica de cada transação.</p>
+
+        <p>Com a indexação iniciada no <b>CoinMarketCap</b> e a integração de gateways de pagamento como Apple Pay e Cripto-Bridges, a INC agora se posiciona como o ativo de custódia preferencial para investidores que buscam independência total.</p>
     </div>
 
-    <div id="log-console">
-        > [SYSTEM] Handshake enviado para CoinMarketCap API...<br>
-        > [NETWORK] Validando Grade Lattice 2500 bits<span class="syncing"></span><br>
-        > [AUDIT] Verificando prova de reserva Alexandre Freire...<br>
+    <div class="card">
+        <h3 style="margin-top:0; color:var(--blue);">Dossiê Técnico para Imprensa</h3>
+        <p style="font-size:0.75em; color:var(--dim);">Copie o texto oficial para distribuição em portais de notícias e redes sociais.</p>
+        <button class="btn-copy" onclick="copyPR()">Copiar Comunicado</button>
     </div>
 
-    <button onclick="simulateSuccess()" style="background:var(--blue); color:#000; border:none; padding:20px; border-radius:12px; font-weight:900; margin-top:20px; cursor:pointer;">ACELERAR SINCRONIA</button>
+    <footer>
+        ©️ 2026 ALEXANDRE FREIRE INC | NEXUS PROTOCOL | ALL RIGHTS RESERVED
+    </footer>
 
     <script>
-        function log(msg) {
-            const c = document.getElementById('log-console');
-            c.innerHTML += `> ${msg}<br>`;
-            c.scrollTop = c.scrollHeight;
-        }
-
-        function simulateSuccess() {
-            log("[CMC] Dados de liquidez recebidos.");
-            setTimeout(() => log("[CMC] Verificando Smart Contract imutável..."), 1000);
-            setTimeout(() => {
-                document.getElementById('cmc-state').innerText = "LIVE ON COINMARKETCAP";
-                document.getElementById('cmc-state').className = "cmc-status live";
-                log("[SUCCESS] INC oficialmente listada no ranking global.");
-                alert("PARABÉNS, ARQUITETO! A INC agora é visível para o mercado mundial.");
-            }, 3000);
+        function copyPR() {
+            const text = document.body.innerText;
+            navigator.clipboard.writeText(text);
+            alert("Comunicado copiado! Pronto para envio aos portais de notícias.");
         }
     </script>
 </body>
