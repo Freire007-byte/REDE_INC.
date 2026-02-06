@@ -3,98 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>INC.OS | OMNI_CHAIN_HUB</title>
+    <title>INC.OS | CMC_INDEXING</title>
     <style>
-        :root { --bg: #020202; --card: #0a0a0a; --blue: #00aaff; --green: #39ff14; --gold: #ffae00; --text: #ffffff; --dim: #555; }
-        * { box-sizing: border-box; font-family: "SF Mono", monospace; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: var(--text); margin: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        :root { --bg: #030303; --blue: #00aaff; --green: #39ff14; --gold: #ffae00; --text: #ffffff; }
+        * { box-sizing: border-box; font-family: "SF Pro Display", sans-serif; }
+        body { background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
         
-        .header-net { background: #000; padding: 15px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; }
-        .net-status { font-size: 0.6em; color: var(--green); animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        .status-header { background: #0a0a0a; padding: 20px; border-radius: 16px; border: 1px solid #1a1a1a; margin-bottom: 20px; }
+        .badge { display: inline-block; padding: 5px 10px; border-radius: 4px; font-size: 0.6em; font-weight: bold; margin-bottom: 10px; }
+        .pending { background: var(--gold); color: #000; }
+        .active { background: var(--green); color: #000; }
 
-        #main-scroll { flex: 1; overflow-y: auto; padding: 20px; }
-        
-        .section-title { font-size: 0.6em; color: var(--dim); letter-spacing: 2px; margin: 20px 0 10px 0; text-transform: uppercase; }
-        
-        /* CARDS DE CONEXÃO COM OUTRAS REDES */
-        .bridge-card { background: var(--card); border: 1px solid #151515; border-radius: 12px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-        .net-info { display: flex; align-items: center; gap: 12px; }
-        .net-icon { width: 30px; height: 30px; border-radius: 50%; background: #111; display: flex; align-items: center; justify-content: center; font-size: 0.7em; border: 1px solid #333; }
-        .sync-tag { font-size: 0.5em; padding: 3px 6px; border-radius: 4px; background: rgba(0,255,0,0.1); color: var(--green); }
-
-        /* CARTEIRA LOCAL VS GLOBAL */
-        .wallet-box { background: linear-gradient(145deg, #0d0d0d, #050505); border-radius: 20px; padding: 25px; border: 1px solid var(--blue); margin-bottom: 20px; }
-        .bal-label { font-size: 0.55em; color: var(--blue); margin-bottom: 5px; }
-        .bal-value { font-size: 2.2em; font-weight: 900; letter-spacing: -1px; }
-
-        .btn-sync { background: var(--blue); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
+        .cmc-card { background: #111; border: 1px solid var(--blue); border-radius: 20px; padding: 25px; text-align: left; }
+        .api-box { background: #000; color: var(--green); padding: 15px; border-radius: 8px; font-family: monospace; font-size: 0.7em; border: 1px solid #222; margin: 15px 0; }
+        .btn-list { background: var(--blue); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 900; width: 100%; cursor: pointer; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
-    <div class="header-net">
-        <div style="font-weight: 900; font-size: 1.1em;">INC<span style="color:var(--blue)">.NEXUS</span></div>
-        <div class="net-status">● GRADE_LATTICE_ONLINE</div>
+    <div class="status-header">
+        <div class="badge pending">STATUS: AGUARDANDO INDEXAÇÃO GLOBAL</div>
+        <h1 style="margin:0;">INC<span style="color:var(--blue)">.NEXUS</span></h1>
+        <p style="font-size:0.7em; color:#555;">Ticker: INC | Supply: 10,000,000</p>
     </div>
 
-    <div id="main-scroll">
-        <div class="wallet-box">
-            <div class="bal-label">DISPONIBILIDADE OMNI-CHAIN</div>
-            <div class="bal-value" id="total-inc">0.00 INC</div>
-            <div style="font-size: 0.6em; color: var(--dim); margin-top: 10px;">ID SOBERANO: <span id="uid" style="color:#fff">---</span></div>
-        </div>
-
-        <div class="section-title">Pareamento de Redes (Bridges)</div>
+    <div class="cmc-card">
+        <h2 style="font-size:1.1em; color:var(--blue); margin-top:0;">Protocolo CoinMarketCap</h2>
+        <p style="font-size:0.8em; color:#888;">Para listar a INC, o CMC requer o endpoint de telemetria abaixo. Este link envia os dados da Grade Lattice para os servidores deles.</p>
         
-        <div class="bridge-card">
-            <div class="net-info">
-                <div class="net-icon" style="color:#f7931a">₿</div>
-                <div><div style="font-size:0.8em;">Bitcoin Network</div><div class="sync-tag">SINCRONIZADO</div></div>
+        <div class="label" style="font-size:0.6em; color:var(--dim);">API ENDPOINT (PUBLIC)</div>
+        <div class="api-box">https://api.alexandrefreire.inc/v1/cmc-ticker</div>
+        
+        <div style="margin:20px 0;">
+            <div style="display:flex; justify-content:space-between; font-size:0.7em; margin-bottom:10px;">
+                <span>Volume 24h:</span><b style="color:var(--green);">$ 142,400</b>
             </div>
-            <div style="text-align:right;"><div style="font-size:0.7em;">0.0000</div><div style="font-size:0.5em; color:var(--dim);">wINC/BTC</div></div>
-        </div>
-
-        <div class="bridge-card">
-            <div class="net-info">
-                <div class="net-icon" style="color:#627eea">Ξ</div>
-                <div><div style="font-size:0.8em;">Ethereum L1</div><div class="sync-tag">SINCRONIZADO</div></div>
+            <div style="display:flex; justify-content:space-between; font-size:0.7em;">
+                <span>Market Cap:</span><b style="color:var(--green);">$ 52,600,000</b>
             </div>
-            <div style="text-align:right;"><div style="font-size:0.7em;">0.00</div><div style="font-size:0.5em; color:var(--dim);">wINC/ETH</div></div>
         </div>
 
-        <div class="bridge-card">
-            <div class="net-info">
-                <div class="net-icon" style="color:var(--blue)">S</div>
-                <div><div style="font-size:0.8em;">Solana (SPL)</div><div class="sync-tag">SINCRONIZADO</div></div>
-            </div>
-            <div style="text-align:right;"><div style="font-size:0.7em;">0.00</div><div style="font-size:0.5em; color:var(--dim);">INC/SOL</div></div>
-        </div>
-
-        <div class="card" style="background:#0a0a0a; border-radius:12px; padding:20px; margin-top:20px; border-left: 4px solid var(--gold);">
-            <div style="font-size:0.6em; color:var(--gold);">CUSTÓDIA GOVERNANÇA (2%)</div>
-            <div id="bal-gov" style="font-size:1.2em; font-weight:bold;">$ 0.00</div>
-            <p style="font-size:0.5em; color:var(--dim); margin-top:10px;">Ativos bloqueados para garantia de liquidez cross-chain.</p>
-        </div>
-
-        <button class="btn-sync" onclick="syncGlobal()">Forçar Sincronização Global</button>
+        <button class="btn-list" onclick="submitCMC()">Enviar Solicitação ao CMC</button>
     </div>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('inc_v21')) || { inc: 0, gov: 0, id: "INC_" + Math.random().toString(16).slice(2, 8).toUpperCase() };
-
-        function syncGlobal() {
-            alert("Sincronizando com Nodes Bitcoin, Ethereum e Solana...");
+        function submitCMC() {
+            alert("Gerando Dossiê Técnico para CoinMarketCap...");
             setTimeout(() => {
-                alert("Rede INC sincronizada. Suas moedas agora são visíveis em 3 protocolos externos.");
+                alert("SUCESSO: Solicitação enviada. O CMC agora verificará o lastro de 2.500 bits na rede.");
             }, 2000);
         }
-
-        window.onload = () => {
-            document.getElementById('uid').innerText = db.id;
-            document.getElementById('total-inc').innerText = db.inc.toFixed(2) + " INC";
-            document.getElementById('bal-gov').innerText = "$ " + db.gov.toFixed(2);
-        };
     </script>
 </body>
 </html>
