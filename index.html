@@ -3,97 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>INC.OS | NEXUS TELEMETRY</title>
+    <title>INC.OS | MANIFESTO & EXCHANGE</title>
     <style>
-        :root { --bg: #020202; --card: #0a0a0a; --blue: #00aaff; --green: #39ff14; --gold: #ffae00; --red: #ff3e3e; --text: #ffffff; --dim: #555; }
-        * { box-sizing: border-box; font-family: "SF Pro Display", "Segoe UI", sans-serif; }
-        body { background: var(--bg); color: var(--text); margin: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
+        :root { --bg: #050505; --card: #0d0d0d; --blue: #00aaff; --green: #39ff14; --gold: #ffae00; --text: #ffffff; --dim: #666; }
+        * { box-sizing: border-box; font-family: "SF Pro Display", sans-serif; }
+        body { background: var(--bg); color: var(--text); margin: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
         
-        /* HEADER TELEMETRIA */
-        .telemetry-bar { background: #111; padding: 10px 15px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; font-family: monospace; font-size: 0.6em; letter-spacing: 1px; }
-        .stat-item { display: flex; gap: 5px; }
-        .stat-item b { color: var(--green); }
+        .telemetry { background: #111; padding: 10px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; font-family: monospace; font-size: 0.6em; }
+        nav { background: #000; display: flex; border-bottom: 1px solid #222; }
+        .nav-item { flex: 1; padding: 15px; text-align: center; font-size: 0.6em; color: var(--dim); cursor: pointer; text-transform: uppercase; }
+        .nav-item.active { color: var(--blue); border-bottom: 2px solid var(--blue); }
 
         .screen { display: none; height: 100%; flex-direction: column; padding: 20px; overflow-y: auto; animation: fadeIn 0.4s ease; }
         .active { display: flex; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .card { background: var(--card); border: 1px solid #151515; border-radius: 20px; padding: 20px; margin-bottom: 15px; }
-        .btn-prime { background: var(--blue); color: #000; border: none; padding: 20px; border-radius: 12px; font-weight: 800; cursor: pointer; width: 100%; text-transform: uppercase; }
-
-        /* QR & EXCHANGE */
-        .qr-portal { width: 180px; height: 180px; background: #fff; padding: 10px; border-radius: 12px; margin: 15px auto; position: relative; }
-        .scan-bar { position: absolute; width: 100%; height: 2px; background: var(--blue); top: 0; animation: scan 2s infinite linear; }
+        .card { background: var(--card); border: 1px solid #1a1a1a; border-radius: 20px; padding: 20px; margin-bottom: 15px; }
+        .btn-prime { background: var(--blue); color: #000; border: none; padding: 18px; border-radius: 12px; font-weight: 800; width: 100%; cursor: pointer; }
+        
+        /* QR PORTAL QUE FUNCIONA */
+        .qr-portal { width: 200px; height: 200px; background: #fff; padding: 10px; border-radius: 12px; margin: 20px auto; position: relative; border: 4px solid var(--blue); cursor: pointer; }
+        .scan-line { position: absolute; width: 100%; height: 2px; background: var(--blue); top: 0; left:0; animation: scan 2s infinite linear; }
         @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
 
-        .pair-input { background: #000; border: 1px solid #222; border-radius: 12px; padding: 15px; display: flex; align-items: center; margin: 15px 0; }
-        .val-input { background: none; border: none; color: #fff; font-size: 1.5em; font-weight: bold; width: 100%; outline: none; }
+        .data-list { font-family: monospace; font-size: 0.65em; background: #000; padding: 12px; border-radius: 8px; border-left: 3px solid var(--blue); word-break: break-all; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-    <div class="telemetry-bar">
-        <div class="stat-item">LATENCY: <b id="latency">-- ms</b></div>
-        <div class="stat-item">TPS: <b id="tps">--</b></div>
-        <div class="stat-item">NODES: <b>2,500</b></div>
+    <div class="telemetry">
+        <span>LATENCY: <b id="lat">--</b></span>
+        <span>TPS: <b id="tps">--</b></span>
+        <span>CORE: <b>ACTIVE</b></span>
     </div>
 
-    <div id="scr-gen" class="screen active" style="justify-content:center; text-align:center;">
-        <h1 style="margin:0; letter-spacing:2px;">INC<span style="color:var(--blue)">.NEXUS</span></h1>
-        <div class="qr-portal" onclick="on()">
-            <div class="scan-bar"></div>
-            <img id="qr" src="" style="width:100%">
-        </div>
-        <button class="btn-prime" onclick="on()">Acessar Terminal</button>
-    </div>
+    <nav>
+        <div class="nav-item active" onclick="tab('manifesto', this)">Manifesto</div>
+        <div class="nav-item" onclick="tab('wallet', this)">Carteira</div>
+        <div class="nav-item" onclick="tab('exchange', this)">Comprar</div>
+    </nav>
 
-    <div id="scr-ex" class="screen">
-        <div class="card">
-            <div style="font-size:0.6em; color:var(--dim);">CONVERSOR GLOBAL</div>
-            <div class="pair-input">
-                <input type="number" id="amt" class="val-input" placeholder="0.00" oninput="up()">
-                <select id="cur" style="background:#222; color:var(--blue); border:none; padding:8px; border-radius:4px; font-weight:bold;">
-                    <option value="5.26">EUR</option>
-                    <option value="0.95">BRL</option>
-                    <option value="4.88">USD</option>
-                </select>
+    <div id="main-view">
+        
+        <div id="manifesto" class="screen active">
+            <h1 style="color:var(--blue); margin-top:0;">INC.OS</h1>
+            <p style="font-size:0.8em; color:var(--dim); line-height:1.6;">
+                A Rede INC nasceu da necessidade de uma <b>Veradeira Democracia</b>. 
+                Sob a liderança do Arquiteto <b>Alexandre Freire</b>, criamos um porto seguro 
+                onde a computação quântica não pode tocar e os bancos centrais não têm poder.
+            </p>
+            <div class="card">
+                <h3 style="margin:0; color:var(--gold);">POR QUE EXISTIMOS?</h3>
+                <p style="font-size:0.7em; color:#888;">
+                    Para garantir que o seu capital seja soberano. Os 2% de governança 
+                    são o combustível que mantém os 2.500 bits da nossa grade Lattice 
+                    impenetráveis, financiando a integridade da rede para sempre.
+                </p>
             </div>
-            <div style="display:flex; justify-content:space-between; font-size:0.7em;">
-                <span style="color:var(--dim);">Estimado (98%):</span>
-                <b id="res" style="color:var(--green);">0.00 INC</b>
+        </div>
+
+        <div id="wallet" class="screen">
+            <div class="card" style="text-align:center;">
+                <div style="font-size:0.6em; color:var(--dim); margin-bottom:10px;">TOQUE NO QR PARA GERAR SUA IDENTIDADE SOBERANA</div>
+                <div class="qr-portal" onclick="createAccount()">
+                    <div class="scan-line"></div>
+                    <img id="qr-img" src="" style="width:100%">
+                </div>
+            </div>
+
+            <div id="key-section" style="display:none;">
+                <div class="card">
+                    <div style="font-size:0.6em; color:var(--dim);">CHAVE PRIVADA (2500 BITS)</div>
+                    <div class="data-list" id="priv">...</div>
+                    <div style="font-size:0.6em; color:var(--dim); margin-top:15px;">ENDEREÇO DA CARTEIRA</div>
+                    <div class="data-list" id="addr" style="color:var(--green)">...</div>
+                    <p style="font-size:0.5em; color:var(--gold); margin-top:10px;">⚠️ Guarde estas chaves. Elas são sua única lei.</p>
+                </div>
             </div>
         </div>
 
-        <div class="card" style="border-left: 4px solid var(--gold);">
-            <div style="font-size:0.6em; color:var(--gold);">CUSTÓDIA ARQUITETO (2%)</div>
-            <div id="gov" style="font-size:1.8em; font-weight:bold; color:var(--gold); margin-top:5px;">0.00 INC</div>
+        <div id="exchange" class="screen">
+            <div class="card">
+                <div style="font-size:0.6em; color:var(--dim);">CONVERSOR GLOBAL</div>
+                <input type="number" id="amt" style="background:#000; border:1px solid #333; color:#fff; width:100%; padding:15px; border-radius:10px; font-size:1.5em; margin:15px 0;" placeholder="0.00" oninput="calc()">
+                <div id="prev" style="font-size:0.7em; color:var(--green); font-weight:bold;">Recebe: 0.00 INC</div>
+                <button class="btn-prime" style="margin-top:15px;" onclick="alert('Solicitando conexão bancária...')">COMPRAR AGORA</button>
+            </div>
+            <div class="card" style="border-left: 3px solid var(--gold);">
+                <div style="font-size:0.6em; color:var(--gold);">RESERVA DO ARQUITETO (2%)</div>
+                <div id="res-gov" style="font-size:1.2em; font-weight:bold; color:var(--gold);">0.00 INC</div>
+            </div>
         </div>
 
-        <button class="btn-prime" style="background:var(--green);" onclick="alert('Conectando ao Gateway...')">Depositar Agora</button>
     </div>
 
     <script>
-        function on() { document.getElementById('scr-gen').classList.remove('active'); document.getElementById('scr-ex').classList.add('active'); }
-        function up() {
+        function tab(p, e) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(p).classList.add('active');
+            e.classList.add('active');
+        }
+
+        function createAccount() {
+            const key = "LATTICE_PRI_" + Array.from({length: 48}, () => Math.floor(Math.random() * 16).toString(16)).join("").toUpperCase();
+            const addr = "INC_8x" + Math.random().toString(16).slice(2, 14).toUpperCase();
+            document.getElementById('priv').innerText = key;
+            document.getElementById('addr').innerText = addr;
+            document.getElementById('key-section').style.display = 'block';
+            alert("Identidade Gerada com Sucesso!");
+        }
+
+        function calc() {
             let v = document.getElementById('amt').value || 0;
-            let r = document.getElementById('cur').value;
-            document.getElementById('res').innerText = (v * r * 0.98).toFixed(2) + " INC";
+            document.getElementById('prev').innerText = "Recebe (98%): " + (v * 5.26 * 0.98).toFixed(2) + " INC";
+            document.getElementById('res-gov').innerText = (v * 5.26 * 0.02).toFixed(2) + " INC";
         }
 
-        // MOTOR DE TELEMETRIA
         function telemetry() {
-            // Simula latência variando entre 12ms e 28ms
-            const lat = Math.floor(Math.random() * (28 - 12 + 1)) + 12;
-            // Simula TPS variando conforme o "tráfego" da rede
-            const tps = (Math.random() * (450 - 380) + 380).toFixed(1);
-            
-            document.getElementById('latency').innerText = lat + " ms";
-            document.getElementById('tps').innerText = tps;
+            document.getElementById('lat').innerText = (Math.random() * (22 - 14) + 14).toFixed(0) + "ms";
+            document.getElementById('tps').innerText = (Math.random() * (410 - 390) + 390).toFixed(1);
         }
 
-        setInterval(telemetry, 2000);
-        telemetry();
-        document.getElementById('qr').src = "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=ROOT_" + Math.random();
+        setInterval(telemetry, 3000);
+        document.getElementById('qr-img').src = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=ACCOUNT_GEN_" + Math.random();
     </script>
 </body>
 </html>
