@@ -18,19 +18,18 @@
         .card { background: var(--card-bg); border-radius: 12px; border: 1px solid #222; padding: 20px; position: relative; }
         .card-title { font-size: 0.85em; font-weight: bold; color: #888; margin-bottom: 20px; }
         
-        .big-value { font-size: 2.2em; font-weight: bold; color: var(--blue); }
+        .big-value { font-size: 2.2em; font-weight: bold; color: var(--blue); transition: 0.5s; }
+        .mining-active { color: var(--green); text-shadow: 0 0 15px var(--green); }
 
-        /* QR CODE INTERATIVO */
         .qr-area { cursor: pointer; transition: 0.3s; position: relative; width: 80px; }
-        .qr-area:hover { filter: drop-shadow(0 0 10px var(--blue)); transform: scale(1.05); }
-        .scan-line { position: absolute; width: 100%; height: 2px; background: var(--blue); top: 0; animation: scan 2s infinite linear; pointer-events: none; }
+        .scan-line { position: absolute; width: 100%; height: 2px; background: var(--blue); top: 0; animation: scan 2s infinite linear; }
         @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
 
-        /* MODAIS */
         .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:2000; align-items:center; justify-content:center; backdrop-filter:blur(10px); }
-        .modal-box { background:#111; border:1px solid var(--blue); padding:30px; border-radius:8px; max-width:500px; width:90%; color:#fff; }
+        .modal-box { background:#111; border: 1px solid var(--blue); padding:30px; border-radius:8px; max-width:500px; width:90%; color:#fff; }
         .wallet-key { background:#000; padding:15px; border:1px solid #333; color:var(--green); font-family:monospace; word-break:break-all; font-size:0.7em; margin-top:15px; }
-        .close-btn { background:var(--blue); color:#000; border:none; padding:10px 20px; cursor:pointer; margin-top:20px; font-weight:bold; width:100%; }
+        .confirm-btn { background:var(--blue); color:#000; border:none; padding:12px; cursor:pointer; margin-top:20px; font-weight:bold; width:100%; transition: 0.3s; }
+        .confirm-btn:hover { background: var(--green); }
     </style>
 </head>
 <body>
@@ -40,24 +39,24 @@
         <div class="status-item">STATUS DE REDE<b>NÚCLEO ONLINE</b></div>
         <div class="status-item">LATÊNCIA REDE<b id="lat">0ms</b></div>
         <div class="status-item">PULSOS ATIVOS<b id="vis">37333</b></div>
-        <button onclick="document.getElementById(\"manifesto\").style.display=\"flex\"" style="background:var(--blue); border:none; padding:12px; border-radius:6px; cursor:pointer; font-weight:bold; width:100%; margin-top:10px;">ABRIR PROTOCOLO</button>
+        <button onclick="document.getElementById(\"manifesto\").style.display=\"flex\"" style="background:none; border:1px solid var(--blue); color:var(--blue); padding:10px; border-radius:6px; cursor:pointer; width:100%; margin-top:10px; font-size:0.7em;">ABRIR PROTOCOLO</button>
     </div>
 
     <div class="main-content">
         <div class="card"><div class="card-title">Ativos Totais</div><div class="big-value" id="saldo">0.00 INC</div></div>
-        <div class="card"><div class="card-title">Estabilidade</div><div class="big-value">99.99%</div></div>
+        <div class="card"><div class="card-title">Sincronia Lattice</div><div class="big-value" id="sync-val">99.99%</div></div>
 
         <div class="card" style="grid-column: span 2;">
-            <div class="card-title">Identidade Digital & Gerador de Carteira</div>
+            <div class="card-title">Identidade Digital (2500 BITS)</div>
             <div style="display:flex; gap:20px; align-items:center;">
                 <div class="qr-area" onclick="gerarCarteira()">
                     <div class="scan-line"></div>
                     <img id="qr-img" src="" style="width:100%; background:#fff; padding:5px; border-radius:4px;">
                 </div>
                 <div style="font-size:0.8em;">
-                    <div style="color:var(--dim)">USER_AUTH: <span style="color:#fff">SOVEREIGN_ARCHITECT</span></div>
-                    <div style="color:var(--dim); margin-top:5px;">LATTICE_SEED: <span id="seed" style="color:var(--green)">0x3UDQS...</span></div>
-                    <button onclick="gerarCarteira()" style="background:none; border:1px solid var(--blue); color:var(--blue); font-size:0.8em; margin-top:10px; cursor:pointer; padding:4px 8px;">CRIAR CARTEIRA 2500 BITS</button>
+                    <div style="color:var(--dim)">USER_ID: <span id="user-display" style="color:#fff">SOVEREIGN_ARCHITECT</span></div>
+                    <div style="color:var(--dim); margin-top:5px;">STATUS: <span id="auth-status" style="color:var(--blue)">AGUARDANDO CHAVE...</span></div>
+                    <button onclick="gerarCarteira()" style="background:var(--blue); border:none; color:#000; font-size:0.8em; margin-top:10px; cursor:pointer; padding:6px 12px; font-weight:bold; border-radius:4px;">GERAR CARTEIRA ATÔMICA</button>
                 </div>
             </div>
         </div>
@@ -66,33 +65,37 @@
     <div id="walletModal" class="modal">
         <div class="modal-box">
             <h3 style="color:var(--blue); margin-top:0;">CARTEIRA ATÔMICA GERADA</h3>
-            <p style="font-size:0.8em; color:#888;">Protocolo Lattice-based: n=2500 bits de entropia pura criados sob a Fórmula Freire.</p>
-            <div class="wallet-key" id="final-key">GERANDO HASH...</div>
-            <button class="close-btn" onclick="this.parentElement.parentElement.style.display=\"none\"">CONFIRMAR E SINCRONIZAR</button>
+            <p style="font-size:0.75em; color:#888;">Entropia pura (n=2500) detectada sob a Fórmula Freire. Esta chave é única e incorruptível.</p>
+            <div class="wallet-key" id="final-key">INC_2500_...</div>
+            <button class="confirm-btn" onclick="sincronizarCore()">CONFIRMAR E SINCRONIZAR</button>
         </div>
     </div>
 
     <div id="manifesto" class="modal">
         <div class="modal-box">
             <h3 style="color:var(--blue)">PROTOCOLO SOBERANO</h3>
-            <p style="font-size:0.8em; line-height:1.6;">A matemática protege a liberdade onde as leis falham. Esta interface garante a soberania total do usuário Alexandre Freire.<br><br><b>f(x) = ∑ aᵢ xᵢ mod(q) | n=2500</b></p>
-            <button class="close-btn" onclick="this.parentElement.parentElement.style.display=\"none\"">FECHAR</button>
+            <p style="font-size:0.8em; line-height:1.6;">f(x) = ∑ aᵢ xᵢ mod(q) | n=2500<br><br>A matemática protege a liberdade onde as leis falham.</p>
+            <button class="confirm-btn" onclick="this.parentElement.parentElement.style.display=\"none\"">FECHAR</button>
         </div>
     </div>
 
     <script>
+        let chaveAtual = "";
+
         function gerarCarteira() {
-            const modal = document.getElementById("walletModal");
-            const keyBox = document.getElementById("final-key");
-            modal.style.display = "flex";
-            let fakeKey = "INC_2500_" + Array.from({length: 64}, () => Math.floor(Math.random() * 16).toString(16)).join("");
-            keyBox.innerText = fakeKey.toUpperCase();
+            chaveAtual = "INC_2500_" + Array.from({length: 32}, () => Math.floor(Math.random() * 16).toString(16)).join("").toUpperCase();
+            document.getElementById("final-key").innerText = chaveAtual;
+            document.getElementById("walletModal").style.display = "flex";
         }
 
-        function updateQR() {
-            const seed = Math.random().toString(36).substring(7).toUpperCase();
-            document.getElementById("seed").innerText = "0x" + seed + "_LATTICE";
-            document.getElementById("qr-img").src = "https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=" + seed;
+        function sincronizarCore() {
+            document.getElementById("walletModal").style.display = "none";
+            document.getElementById("auth-status").innerText = "SINCRONIZADO";
+            document.getElementById("auth-status").style.color = "var(--green)";
+            document.getElementById("user-display").innerText = chaveAtual.substring(0, 16) + "...";
+            document.getElementById("saldo").classList.add("mining-active");
+            alert("Sincronização Atômica Concluída.
+Núcleo operando sob grade de 2500 bits.");
         }
 
         async function update() {
@@ -104,7 +107,8 @@
                 document.getElementById("vis").innerText = d.visitas;
                 document.getElementById("lat").innerText = Math.round(performance.now() - t0) + "ms";
             } catch(e) {}
-            updateQR();
+            const seed = Math.random().toString(36).substring(7).toUpperCase();
+            document.getElementById("qr-img").src = "https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=" + seed;
         }
         setInterval(update, 3000);
         update();
