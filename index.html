@@ -3,38 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INC.NEXUS | REAL_ASSET_V67</title>
+    <title>INC.NEXUS | WEB 4.0</title>
     <style>
-        :root { --bg: #000; --blue: #00aaff; --green: #39ff14; --card: #0a0a0a; }
-        * { box-sizing: border-box; font-family: "SF Mono", "Fira Code", monospace; }
-        body { background: var(--bg); color: #fff; margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center; }
+        :root { --bg: #000; --neon: #39ff14; --pqc: #00f2ff; }
+        * { box-sizing: border-box; font-family: "SF Mono", monospace; }
+        body { background: var(--bg); color: #fff; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; }
         
-        .card { background: var(--card); border: 1px solid #1a1a1a; padding: 30px; border-radius: 24px; width: 90%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .label { font-size: 0.6em; color: #555; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; }
-        .val { font-size: 2.2em; font-weight: 900; color: var(--green); margin-bottom: 20px; }
-        .seal-box { background: #000; border: 1px dashed var(--blue); padding: 15px; border-radius: 12px; margin-top: 20px; }
-        .seal { color: var(--blue); font-weight: bold; letter-spacing: 3px; font-size: 1.1em; }
+        .terminal { background: #080808; border: 1px solid #1a1a1a; padding: 25px; border-radius: 20px; width: 100%; max-width: 500px; box-shadow: 0 0 50px rgba(0, 242, 255, 0.05); }
+        .web4-tag { font-size: 0.5em; color: var(--pqc); border: 1px solid var(--pqc); padding: 4px 10px; border-radius: 20px; font-weight: bold; }
         
-        .footer { margin-top: 30px; font-size: 0.6em; color: #333; line-height: 1.5; }
+        .dna-stream { font-size: 0.65em; color: var(--neon); overflow-wrap: break-word; margin: 20px 0; background: #000; padding: 10px; border-radius: 8px; border-left: 2px solid var(--neon); }
+        .label { font-size: 0.5em; color: #444; text-transform: uppercase; margin-bottom: 5px; }
+        .val { font-size: 1.4em; font-weight: 900; color: var(--pqc); }
+        
+        .manifesto { font-size: 0.6em; color: #555; text-align: center; margin-top: 20px; font-style: italic; }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <div class="label">Lastro Real de Tesouraria</div>
-        <div class="val" id="treasury-val">$ 0,00</div>
-        
-        <div class="seal-box">
-            <div class="label">Selo de Autenticidade PQC</div>
-            <div class="seal" id="math-seal">----------</div>
+    <div class="terminal">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div style="font-weight:900; font-size:1.1em; color:#fff;">INC.NEXUS</div>
+            <div class="web4-tag">WEB 4.0 PROTOCOL</div>
         </div>
-        
-        <div class="label" id="wallet-display" style="margin-top:20px; font-size: 0.5em;">ID: Sincronizando...</div>
-    </div>
 
-    <div class="footer">
-        INC.NEXUS // SOBERANIA MATEMÁTICA<br>
-        O CÁLCULO É A LEI.
+        <div style="margin-top:25px;">
+            <div class="label">Quantum DNA Stream (Lattice-2500)</div>
+            <div class="dna-stream" id="dna">SINC_LATTICE...</div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; margin-top:20px;">
+            <div>
+                <div class="label">Lastro de Liquidez</div>
+                <div class="val" id="lastro">$ 4.937,17</div>
+            </div>
+            <div style="text-align:right;">
+                <div class="label">Status</div>
+                <div class="val" style="color:var(--neon);">ATIVO</div>
+            </div>
+        </div>
+
+        <div class="manifesto">
+            "A matemática é a única democracia verdadeira."
+        </div>
     </div>
 
     <script>
@@ -45,13 +56,11 @@
             try {
                 const res = await fetch(`/status?wallet_id=${walletID}`);
                 const d = await res.json();
-                
-                document.getElementById('treasury-val').innerText = "$ " + d.tesouraria.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-                document.getElementById('math-seal').innerText = d.auth_seal;
-                document.getElementById('wallet-display').innerText = "DEVICE_ID: " + walletID;
-            } catch (e) { console.error("Sync Error"); }
+                document.getElementById('dna').innerText = d.dna;
+                document.getElementById('lastro').innerText = "$ " + d.lastro.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+            } catch (e) { document.getElementById('dna').innerText = "CONNECTION_LOST"; }
         }
-
+        setInterval(sync, 10000);
         window.onload = sync;
     </script>
 </body>
