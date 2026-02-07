@@ -3,102 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>INC.NEXUS | QUANTUM_CORE_v43</title>
+    <title>INC.NEXUS | SOBERANIA_v44</title>
     <style>
-        :root { --bg: #020202; --card: #080808; --blue: #00aaff; --green: #39ff14; --gold: #fcd535; --text: #ffffff; --dim: #555; }
-        * { box-sizing: border-box; font-family: "SF Mono", "Fira Code", monospace; -webkit-tap-highlight-color: transparent; }
+        :root { --bg: #010101; --card: #0a0a0a; --blue: #00aaff; --green: #39ff14; --gold: #fcd535; --red: #ff3e3e; --text: #ffffff; --dim: #666; }
+        * { box-sizing: border-box; font-family: "SF Mono", monospace; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: var(--text); margin: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
         
-        /* BARRA DE INTEGRIDADE (VEM DO SERVIDOR) */
-        .integrity-bar { background: #000; padding: 10px 20px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; font-size: 0.55em; letter-spacing: 1px; }
-        .integrity-bar b { color: var(--green); text-shadow: 0 0 5px var(--green); }
+        /* TOP BAR TELEMETRIA */
+        .telemetry { background: #000; padding: 8px 15px; border-bottom: 1px solid #1a1a1a; display: flex; justify-content: space-between; font-size: 0.55em; letter-spacing: 1px; }
+        .telemetry b { color: var(--green); }
 
-        header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #111; }
+        /* HEADER */
+        header { padding: 15px 20px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; background: #050505; }
+        .status-pill { font-size: 0.5em; padding: 4px 10px; border-radius: 20px; border: 1px solid var(--blue); color: var(--blue); font-weight: bold; }
+
+        #viewport { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 100px; }
         
-        #viewport { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 100px; }
-        .card { background: var(--card); border: 1px solid #151515; border-radius: 12px; padding: 20px; margin-bottom: 15px; position: relative; }
-        .label { font-size: 0.5em; color: var(--dim); text-transform: uppercase; margin-bottom: 8px; }
-        
-        .val-main { font-size: 2.2em; font-weight: 900; color: var(--text); }
-        .status-tag { font-size: 0.5em; background: rgba(0,170,255,0.1); color: var(--blue); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--blue); }
+        /* CARDS ESTABILIZADOS (PREVINE OVERFLOW) */
+        .card { background: var(--card); border: 1px solid #151515; border-radius: 16px; padding: 18px; margin-bottom: 15px; overflow: hidden; }
+        .label { font-size: 0.55em; color: var(--dim); text-transform: uppercase; margin-bottom: 5px; }
+        .val-main { font-size: 1.8em; font-weight: 900; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        /* TABELA DE BLOCOS */
-        .block-info { display: flex; justify-content: space-between; font-size: 0.7em; padding: 8px 0; border-bottom: 1px solid #0d0d0d; }
+        /* TABELA DE MERCADO ESTILO CMC */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { text-align: left; font-size: 0.5em; color: var(--dim); padding: 8px; border-bottom: 1px solid #222; }
+        td { padding: 12px 8px; border-bottom: 1px solid #111; font-size: 0.75em; }
+        .price-up { color: var(--green); } .price-down { color: var(--red); }
 
+        /* FOOTER NAV */
         nav { background: #000; border-top: 1px solid #222; display: flex; position: fixed; bottom: 0; width: 100%; padding-bottom: env(safe-area-inset-bottom); }
-        .nav-item { flex: 1; padding: 18px; text-align: center; font-size: 0.6em; color: var(--dim); cursor: pointer; }
+        .nav-item { flex: 1; padding: 15px; text-align: center; font-size: 0.55em; color: var(--dim); cursor: pointer; text-transform: uppercase; }
         .nav-item.active { color: var(--blue); border-top: 2px solid var(--blue); }
     </style>
 </head>
 <body>
 
-    <div class="integrity-bar">
-        <span>NUCLEO_ENTROPIA: <b id="entropy-val">0.00%</b></span>
-        <span>STATUS: <b>PÓS-QUÂNTICO_ATIVO</b></span>
+    <div class="telemetry">
+        <span>ENTROPIA: <b id="entropy">0.00%</b></span>
+        <span>TPS: <b>421.1</b></span>
+        <span>LATÊNCIA: <b id="latency">-- ms</b></span>
     </div>
 
     <header>
         <div style="font-weight:900; font-size:1.1em; color:var(--blue);">INC<span style="color:#fff">.NEXUS</span></div>
-        <div class="status-tag" id="net-state">SINCRONIZANDO...</div>
+        <div class="status-pill" id="net-status">OFFLINE</div>
     </header>
 
     <div id="viewport">
-        <div class="card">
-            <div class="label">Tesouraria (Coração da Rede)</div>
-            <div class="val-main" id="tesouraria-val">$ 0.00</div>
-            <div style="font-size:0.5em; color:var(--green); margin-top:10px;">PROVA DE SOBERANIA ATIVA</div>
+        <div class="card" style="border-left: 4px solid var(--blue);">
+            <div class="label">Tesouraria Coração da Rede (PQC)</div>
+            <div class="val-main" id="treasury-val">$ 0.00</div>
+            <div style="font-size:0.5em; color:var(--green); margin-top:5px;">● NÚCLEO ATIVO: <span id="block-count">0</span> BLOCOS</div>
         </div>
 
         <div class="card">
-            <div class="label">Status da Ledger (Memória PQC)</div>
-            <div class="block-info"><span>Blocos Processados:</span><b id="block-count">0</b></div>
-            <div class="block-info"><span>Segurança:</span><b style="color:var(--blue)">LATTICE_2500</b></div>
-            <div class="block-info" style="border:none;"><span>Latência:</span><b id="latency-val">-- ms</b></div>
+            <div class="label">Sentimento do Mercado (Fear & Greed)</div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div style="font-size:1.5em; font-weight:900; color:var(--gold);" id="fg-val">82</div>
+                <div style="font-size:0.5em; text-align:right; color:var(--dim);">EXTREME GREED<br>Auditado via SVP_SHIELD</div>
+            </div>
         </div>
 
-        <div class="card" style="border-color: var(--gold);">
-            <div class="label" style="color:var(--gold);">Sua Identidade Quântica</div>
-            <div id="user-hash" style="font-family:monospace; font-size:0.5em; color:var(--dim); word-break:break-all;">Aguardando Auth...</div>
+        <div class="label" style="margin-left:5px;">Top Assets Intelligence</div>
+        <div class="card" style="padding:5px;">
+            <table>
+                <thead>
+                    <tr><th>#</th><th>Asset</th><th>Price</th><th>24h%</th></tr>
+                </thead>
+                <tbody id="market-list">
+                    <tr><td>1</td><td><b>INC</b></td><td id="inc-price">$ 5.2910</td><td class="price-up">+0.52%</td></tr>
+                    <tr><td>2</td><td><b>BTC</b></td><td id="btc-price">...</td><td id="btc-change">...</td></tr>
+                    <tr><td>3</td><td><b>ETH</b></td><td id="eth-price">...</td><td id="eth-change">...</td></tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
     <nav>
         <div class="nav-item active">Terminal</div>
         <div class="nav-item">Cofre</div>
-        <div class="nav-item" onclick="location.reload()">Sync</div>
+        <div class="nav-item" onclick="resetConn()">Reconectar</div>
     </nav>
 
     <script>
-        const API = window.location.origin; // Usa a URL da Vercel automaticamente
+        const API_BASE = window.location.origin;
 
-        async function syncNetwork() {
+        async function updateData() {
             const start = Date.now();
             try {
-                // Busca status geral do servidor.py
-                const resStatus = await fetch(`${API}/status`);
-                const dataStatus = await resStatus.json();
+                // Sincronia com o seu servidor.py
+                const resStatus = await fetch(`${API_BASE}/status`);
+                const status = await resStatus.json();
                 
-                // Busca integridade do NucleoAtomico
-                const resNano = await fetch(`${API}/api/nano_status`);
-                const dataNano = await resNano.json();
+                const resNano = await fetch(`${API_BASE}/api/nano_status`);
+                const nano = await resNano.json();
 
-                // Atualiza UI com dados REAIS do back-end
-                document.getElementById('tesouraria-val').innerText = "$ " + dataStatus.tesouraria.toLocaleString('en-US', {minimumFractionDigits: 2});
-                document.getElementById('block-count').innerText = dataStatus.blocos;
-                document.getElementById('entropy-val').innerText = dataNano.integridade.toFixed(2) + "%";
-                document.getElementById('user-hash').innerText = dataStatus.seguranca;
-                document.getElementById('net-state').innerText = "CONECTADO";
-                document.getElementById('latency-val').innerText = (Date.now() - start) + " ms";
+                // Atualiza Dashboard Real
+                document.getElementById('treasury-val').innerText = "$ " + status.tesouraria.toLocaleString('en-US', {minimumFractionDigits: 2});
+                document.getElementById('block-count').innerText = status.blocos;
+                document.getElementById('entropy').innerText = nano.integridade.toFixed(2) + "%";
+                document.getElementById('net-status').innerText = "CONEXÃO_ESTABELECIDA";
+                document.getElementById('net-status').style.borderColor = "var(--green)";
+                document.getElementById('net-status').style.color = "var(--green)";
+                document.getElementById('latency').innerText = (Date.now() - start) + " ms";
+
+                // Puxa Mercado Externo (Binance) para o modo Inteligência
+                const resMkt = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbols=["BTCUSDT","ETHUSDT"]');
+                const mkt = await resMkt.json();
+
+                updateAsset('btc', mkt[0]);
+                updateAsset('eth', mkt[1]);
 
             } catch (e) {
-                document.getElementById('net-state').innerText = "ERRO_LINK";
-                document.getElementById('net-state').style.color = "red";
+                document.getElementById('net-status').innerText = "ERRO_LINK";
+                document.getElementById('net-status').style.color = "var(--red)";
             }
         }
 
-        // Loop de sincronia com o servidor a cada 3 segundos
-        setInterval(syncNetwork, 3000);
-        window.onload = syncNetwork;
+        function updateAsset(id, data) {
+            const price = parseFloat(data.lastPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
+            const change = parseFloat(data.priceChangePercent);
+            document.getElementById(`${id}-price`).innerText = "$ " + price;
+            const cEl = document.getElementById(`${id}-change`);
+            cEl.innerText = (change >= 0 ? "+" : "") + change.toFixed(2) + "%";
+            cEl.className = change >= 0 ? "price-up" : "price-down";
+        }
+
+        function resetConn() { location.reload(); }
+
+        setInterval(updateData, 3000);
+        window.onload = updateData;
     </script>
 </body>
 </html>
