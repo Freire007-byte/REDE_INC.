@@ -2,64 +2,101 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>INC.NEXUS | STABLE_V63</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INC.OS | SOVEREIGN_DASHBOARD</title>
     <style>
-        :root { --bg: #000; --blue: #00aaff; --green: #39ff14; --card: #0d0d0d; --text: #fff; }
-        * { box-sizing: border-box; font-family: "SF Mono", monospace; }
-        body { background: var(--bg); color: var(--text); margin: 0; padding-bottom: 80px; }
-        header { padding: 20px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; }
-        .card { background: var(--card); border-radius: 16px; padding: 20px; margin: 15px; border: 1px solid #1a1a1a; text-align: center; }
-        .val { font-size: 2em; font-weight: 900; color: var(--green); }
-        #qrcode { background: #fff; padding: 10px; border-radius: 12px; display: inline-block; margin: 15px 0; border: 4px solid var(--blue); }
-        .btn { width: 100%; padding: 18px; border-radius: 12px; border: none; font-weight: bold; background: var(--blue); color: #000; cursor: pointer; }
-        nav { position: fixed; bottom: 0; width: 100%; background: #000; border-top: 1px solid #222; display: flex; }
-        .nav-item { flex: 1; padding: 20px; text-align: center; font-size: 0.7em; color: #555; font-weight: bold; }
-        .active { color: var(--blue); border-top: 2px solid var(--blue); }
+        :root { --bg: #0d0d0d; --card-bg: #141414; --blue: #00aaff; --text: #e0e0e0; --dim: #555; }
+        body { background: var(--bg); color: var(--text); font-family: "Segoe UI", Tahoma, sans-serif; margin: 0; padding: 20px; display: grid; grid-template-columns: 250px 1fr; gap: 20px; }
+        
+        /* Barra Lateral de Status */
+        .sidebar { background: var(--card-bg); padding: 20px; border-radius: 12px; border: 1px solid #222; height: calc(100vh - 80px); }
+        .logo { font-size: 1.8em; font-weight: bold; color: #fff; margin-bottom: 30px; border-bottom: 2px solid var(--blue); padding-bottom: 10px; }
+        .status-item { font-size: 0.7em; margin-bottom: 15px; color: var(--dim); letter-spacing: 1px; }
+        .status-item b { color: var(--blue); display: block; font-size: 1.1em; margin-top: 3px; }
+
+        /* Grid de Conteúdo Principal */
+        .main-content { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .card { background: var(--card-bg); border-radius: 12px; border: 1px solid #222; padding: 20px; position: relative; }
+        .card-title { font-size: 0.85em; font-weight: bold; color: #888; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        
+        /* Valores e Gráficos Simulados */
+        .big-value { font-size: 2.2em; font-weight: bold; color: var(--blue); margin-bottom: 10px; }
+        .chart-placeholder { width: 100%; height: 100px; background: linear-gradient(90deg, transparent 0%, rgba(0,170,255,0.1) 50%, transparent 100%); border-bottom: 1px solid #333; position: relative; overflow: hidden; }
+        .chart-placeholder::after { content: ""; position: absolute; bottom: 10px; left: 0; width: 100%; height: 40px; border-top: 2px solid var(--blue); opacity: 0.4; }
+
+        /* Tabela de Transferência */
+        table { width: 100%; border-collapse: collapse; font-size: 0.7em; margin-top: 10px; }
+        th { text-align: left; color: var(--dim); padding: 8px; border-bottom: 1px solid #222; }
+        td { padding: 8px; border-bottom: 1px solid #1a1a1a; }
+        .tag-status { color: var(--blue); font-weight: bold; }
+
+        /* Protocolo/Manifesto */
+        .btn-protocol { background: var(--blue); color: #000; border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 20px; font-size: 0.8em; }
     </style>
 </head>
 <body>
-    <header>
-        <div style="font-weight:900; color:var(--blue);">INC.NEXUS</div>
-        <div id="net-status" style="font-size:0.5em; color:var(--green);">PQC_READY</div>
-    </header>
 
-    <div class="card">
-        <div style="font-size: 0.6em; color: #555;">SALDO CARTEIRA</div>
-        <div class="val" id="user-bal">0.00 INC</div>
-        <div id="qrcode"></div>
-        <div id="wallet-id" style="font-size: 0.5em; color: var(--blue); font-family: monospace; margin-top: 10px;"></div>
-        <button class="btn" onclick="faucet()">ATIVAR CARTEIRA (+10 INC)</button>
+    <div class="sidebar">
+        <div class="logo">INC<span style="color:var(--blue)">.OS</span></div>
+        <div class="status-item">STATUS DE REDE<b>NÚCLEO ONLINE</b></div>
+        <div class="status-item">LATÊNCIA REDE<b id="lat">0ms</b></div>
+        <div class="status-item">PULSOS ATIVOS<b id="vis">0</b></div>
+        <div class="status-item">ASSINATURA<b>VALIDADA</b></div>
+        <button class="btn-protocol" onclick="alert(\"PROTOCOLO SOBERANO ATIVO
+
+Matemática: f(x) = ∑ aᵢ xᵢ mod(q)
+Segurança: Lattice 2500 bytes\")">ABRIR PROTOCOLO</button>
     </div>
 
-    <div class="card">
-        <div style="font-size: 0.6em; color: #555;">TESOURARIA GLOBAL</div>
-        <div style="font-size: 1.2em; font-weight: bold;" id="treasury-val">$ 0.00</div>
+    <div class="main-content">
+        <div class="card">
+            <div class="card-title">Ativos Totais da Rede <span>●</span></div>
+            <div class="big-value" id="saldo">0.00 INC</div>
+            <div class="chart-placeholder"></div>
+            <div style="font-size:0.6em; color:#444; margin-top:10px;">FLUXO TEMPORAL DE MINERAÇÃO</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Estabilidade Quântica <span>●</span></div>
+            <div class="big-value">99.99<span style="font-size:0.4em">%</span></div>
+            <div class="chart-placeholder" style="filter: hue-rotate(90deg);"></div>
+            <div style="font-size:0.6em; color:#444; margin-top:10px;">INTEGRIDADE DO COFRE ATÔMICO</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Identidade Digital <span>●</span></div>
+            <div style="display:flex; gap:15px; align-items:center;">
+                <div style="width:60px; height:60px; background:#fff; padding:5px; border-radius:4px;"><img src="https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=INC-SOVEREIGN" style="width:100%"></div>
+                <div style="font-size:0.65em;">
+                    <div style="color:var(--dim)">USER ID: <span style="color:#fff">SOVEREIGN_ARCHITECT</span></div>
+                    <div style="color:var(--dim); margin-top:5px;">CHAVE: <span style="color:#fff">ATOMIC_LATTICE_007</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Últimos Pulsos de Rede <span>●</span></div>
+            <table>
+                <tr><th>DATA</th><th>DESTINO</th><th>VALOR</th></tr>
+                <tr><td>FEV 06</td><td>NÚCLEO_01</td><td class="tag-status">STABLE</td></tr>
+                <tr><td>FEV 06</td><td>GATE_2500</td><td class="tag-status">STABLE</td></tr>
+                <tr><td>FEV 06</td><td>SVP_SOLVER</td><td class="tag-status">ACTIVE</td></tr>
+            </table>
+        </div>
     </div>
 
     <script>
-        let walletID = localStorage.getItem('inc_wallet_id') || "INC_" + Math.random().toString(36).substr(2, 9).toUpperCase();
-        localStorage.setItem('inc_wallet_id', walletID);
-
-        async function sync() {
+        async function update() {
+            const t0 = performance.now();
             try {
-                const res = await fetch(`/status?wallet_id=${walletID}`);
-                const d = await res.json();
-                document.getElementById('user-bal').innerText = d.user_balance.toFixed(2) + " INC";
-                document.getElementById('treasury-val').innerText = "$ " + d.treasury.toLocaleString('pt-BR');
-                document.getElementById('wallet-id').innerText = walletID;
-            } catch (e) { console.error("Sync Error"); }
+                const r = await fetch("/api/nano_status");
+                const d = await r.json();
+                document.getElementById("saldo").innerText = d.saldo.toLocaleString("en-US", {minimumFractionDigits: 2}) + " INC";
+                document.getElementById("vis").innerText = d.visitas;
+                document.getElementById("lat").innerText = Math.round(performance.now() - t0) + "ms";
+            } catch(e) {}
         }
-
-        async function faucet() {
-            const res = await fetch(`/api/faucet?wallet_id=${walletID}`, {method: 'POST'});
-            if(res.ok) sync();
-        }
-
-        new QRCode(document.getElementById("qrcode"), { text: walletID, width: 150, height: 150 });
-        setInterval(sync, 5000);
-        window.onload = sync;
+        setInterval(update, 2000);
     </script>
 </body>
 </html>
