@@ -3,70 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>INC.NEXUS | OMNI_v46</title>
+    <title>INC.NEXUS | GLOBAL_READY</title>
     <style>
-        :root { --bg: #010101; --card: #0a0a0a; --blue: #00aaff; --green: #39ff14; --gold: #fcd535; --red: #ff3e3e; --text: #ffffff; --dim: #666; }
-        * { box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: var(--text); margin: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        :root { --bg: #010101; --card: #0a0a0a; --blue: #00aaff; --green: #39ff14; --gold: #fcd535; --text: #ffffff; --dim: #444; }
+        * { box-sizing: border-box; font-family: -apple-system, sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: var(--text); margin: 0; height: 100vh; overflow: hidden; display: flex; flex-direction: column; }
         
-        .telemetry { background: #000; padding: 10px 15px; border-bottom: 1px solid #1a1a1a; display: flex; justify-content: space-between; font-size: 0.55em; color: var(--dim); }
-        .telemetry b { color: var(--green); }
+        header { padding: 20px; border-bottom: 1px solid #1a1a1a; display: flex; justify-content: space-between; align-items: center; }
+        .pill { font-size: 0.5em; padding: 4px 10px; border-radius: 20px; border: 1px solid var(--dim); color: var(--dim); }
+        .active-pill { border-color: var(--green); color: var(--green); }
 
-        header { padding: 15px 20px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; background: #050505; }
-        .pill { font-size: 0.5em; padding: 4px 10px; border-radius: 20px; border: 1px solid var(--blue); color: var(--blue); font-weight: bold; }
-
-        #viewport { flex: 1; overflow-y: auto; padding: 15px; padding-bottom: 100px; }
-        .page { display: none; } .active-page { display: block; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        .card { background: var(--card); border: 1px solid #151515; border-radius: 16px; padding: 18px; margin-bottom: 15px; }
+        #viewport { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 100px; }
+        .page { display: none; } .active-page { display: block; }
+        
+        .card { background: var(--card); border: 1px solid #151515; border-radius: 16px; padding: 20px; margin-bottom: 15px; }
         .label { font-size: 0.55em; color: var(--dim); text-transform: uppercase; margin-bottom: 5px; }
-        .val-main { font-size: 1.8em; font-weight: 900; }
+        .val-main { font-size: 2em; font-weight: 900; }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 5px; }
-        th { text-align: left; font-size: 0.5em; color: var(--dim); padding: 8px; border-bottom: 1px solid #222; }
-        td { padding: 12px 8px; border-bottom: 1px solid #111; font-size: 0.75em; }
-        .up { color: var(--green); } .down { color: var(--red); }
-
-        .qr-area { width: 160px; height: 160px; background: #fff; margin: 10px auto; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 3px solid var(--blue); }
+        table { width: 100%; border-collapse: collapse; }
+        td { padding: 12px 5px; border-bottom: 1px solid #0d0d0d; font-size: 0.8em; }
+        .up { color: var(--green); }
 
         nav { background: #000; border-top: 1px solid #222; display: flex; position: fixed; bottom: 0; width: 100%; padding-bottom: env(safe-area-inset-bottom); }
-        .nav-item { flex: 1; padding: 15px; text-align: center; font-size: 0.6em; color: var(--dim); cursor: pointer; text-transform: uppercase; font-weight: bold; }
+        .nav-item { flex: 1; padding: 18px; text-align: center; font-size: 0.6em; color: var(--dim); cursor: pointer; text-transform: uppercase; font-weight: bold; }
         .nav-item.active { color: var(--blue); border-top: 2px solid var(--blue); }
     </style>
 </head>
 <body>
 
-    <div class="telemetry">
-        <span>ENTROPIA: <b id="entropy">99.98%</b></span>
-        <span>TPS: <b>421.1</b></span>
-        <span>LATÊNCIA: <b id="latency">-- ms</b></span>
-    </div>
-
     <header>
-        <div style="font-weight:900; font-size:1.1em; color:var(--blue);">INC<span style="color:#fff">.NEXUS</span></div>
+        <div style="font-weight:900; color:var(--blue);">INC<span style="color:#fff">.NEXUS</span></div>
         <div class="pill" id="net-status">SINCRONIZANDO...</div>
     </header>
 
     <div id="viewport">
         <div id="pg-terminal" class="page active-page">
-            <div class="card" style="border-left: 4px solid var(--blue);">
-                <div class="label">Tesouraria Coração da Rede (PQC)</div>
-                <div class="val-main" id="treasury-val">$ 1.000.000.000,00</div>
-                <div style="font-size:0.5em; color:var(--green); margin-top:5px;">● NÚCLEO ATIVO | <span id="block-count">0</span> BLOCOS</div>
+            <div class="card">
+                <div class="label">Total Assets (Verified)</div>
+                <div class="val-main" id="treasury-val">$ 0.00</div>
+                <div style="font-size:0.5em; color:var(--dim); margin-top:5px;">SVP_SHIELD: ONLINE</div>
             </div>
 
-            <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
-                <div><div class="label">Fear & Greed</div><div style="font-size:1.5em; font-weight:900; color:var(--gold);">82</div></div>
-                <div style="text-align:right;"><div class="label">SVP_SHIELD</div><div style="font-size:0.5em; color:var(--green);">AUDITADO & VERIFICADO</div></div>
-            </div>
-
-            <div class="label" style="margin-left:5px;">Mercado Global (Inteligência)</div>
             <div class="card" style="padding:5px;">
                 <table>
-                    <thead><tr><th>#</th><th>Asset</th><th>Price</th><th>24h%</th></tr></thead>
                     <tbody id="market-list">
-                        <tr><td>1</td><td><b>INC</b></td><td>$ 5.2910</td><td class="up">+0.52%</td></tr>
                         </tbody>
                 </table>
             </div>
@@ -74,14 +54,9 @@
 
         <div id="pg-cofre" class="page">
             <div class="card" style="text-align:center;">
-                <div class="label">Sua Chave Mestra (Grade Lattice)</div>
-                <div class="qr-area"><img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=INC_SOBERANO_ROOT" style="width:90%"></div>
-                <div style="font-family:monospace; font-size:0.6em; color:var(--blue); margin-top:10px;">ID: INC_6ZP0XG1CB</div>
-            </div>
-            <div class="card">
-                <div class="label">Configurações de Soberania</div>
-                <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #111; font-size:0.75em;"><span>Backup Biométrico</span><b style="color:var(--green)">ATIVO</b></div>
-                <div style="display:flex; justify-content:space-between; padding:10px 0; font-size:0.75em;"><span>Nós Conectados</span><b>2.500 / 2.500</b></div>
+                <div class="label">Acesso Biométrico Necessário</div>
+                <div style="font-size:3em; margin:20px 0;">🔒</div>
+                <button style="background:var(--blue); border:none; padding:15px; border-radius:10px; color:#000; font-weight:bold; width:100%;">ATIVAR FACE ID</button>
             </div>
         </div>
     </div>
@@ -89,7 +64,7 @@
     <nav>
         <div class="nav-item active" onclick="tab('pg-terminal', this)">Terminal</div>
         <div class="nav-item" onclick="tab('pg-cofre', this)">Cofre</div>
-        <div class="nav-item" onclick="location.reload()">Sincronizar</div>
+        <div class="nav-item" onclick="location.reload()">Sync</div>
     </nav>
 
     <script>
@@ -100,38 +75,26 @@
             el.classList.add('active');
         }
 
-        async function updateData() {
-            const start = Date.now();
+        async function update() {
             try {
-                // Sincronia Local
-                const res = await fetch(`${window.location.origin}/status`);
-                const status = await res.json();
-                document.getElementById('treasury-val').innerText = "$ " + status.tesouraria.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-                document.getElementById('block-count').innerText = status.blocos;
-                document.getElementById('net-status').innerText = "CONEXÃO_ESTABELECIDA";
-                document.getElementById('net-status').style.color = "var(--green)";
-                document.getElementById('latency').innerText = (Date.now() - start) + " ms";
-            } catch (e) {
-                document.getElementById('net-status').innerText = "MODO_CONTINGÊNCIA";
-            }
+                const resStatus = await fetch(`${window.location.origin}/status`);
+                const status = await resStatus.json();
+                document.getElementById('treasury-val').innerText = "$ " + status.tesouraria.toLocaleString('en-US', {minimumFractionDigits: 2});
+                document.getElementById('net-status').innerText = "CONECTADO";
+                document.getElementById('net-status').classList.add('active-pill');
 
-            // Moedas: BTC, ETH, SOL, ADA, BNB
-            try {
-                const resMkt = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbols=["BTCUSDT","ETHUSDT","SOLUSDT","ADAUSDT","BNBUSDT"]');
+                const resMkt = await fetch('https://api.binance.com/api/v3/ticker/price?symbols=["BTCUSDT","ETHUSDT","SOLUSDT"]');
                 const mkt = await resMkt.json();
-                let rows = `<tr><td>1</td><td><b>INC</b></td><td>$ 5.2910</td><td class="up">+0.52%</td></tr>`;
-                mkt.forEach((coin, i) => {
-                    const price = parseFloat(coin.lastPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
-                    const change = parseFloat(coin.priceChangePercent);
-                    const name = coin.symbol.replace('USDT', '');
-                    rows += `<tr><td>${i+2}</td><td><b>${name}</b></td><td>$ ${price}</td><td class="${change >= 0 ? 'up' : 'down'}">${change >= 0 ? '+' : ''}${change.toFixed(2)}%</td></tr>`;
+                let rows = '';
+                mkt.forEach(coin => {
+                    rows += `<tr><td><b>${coin.symbol.replace('USDT','')}</b></td><td style="text-align:right">$ ${parseFloat(coin.price).toLocaleString()}</td></tr>`;
                 });
                 document.getElementById('market-list').innerHTML = rows;
-            } catch (e) { console.log("Erro API Mercado"); }
+            } catch (e) { document.getElementById('net-status').innerText = "ERRO_LINK"; }
         }
 
-        setInterval(updateData, 5000);
-        window.onload = updateData;
+        setInterval(update, 5000);
+        window.onload = update;
     </script>
 </body>
 </html>
