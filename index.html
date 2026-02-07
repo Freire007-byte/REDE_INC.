@@ -3,15 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>INC.NEXUS | SOBERANIA_V49</title>
+    <title>INC.NEXUS | SOBERANIA_V59</title>
     <style>
-        :root { --bg: #010101; --card: #0a0a0a; --blue: #00aaff; --green: #39ff14; --gold: #fcd535; --red: #ff3e3e; --text: #ffffff; --dim: #555; }
+        :root { --bg: #000; --blue: #00aaff; --green: #39ff14; --gold: #fcd535; --card: #0d0d0d; --text: #fff; --dim: #555; }
         * { box-sizing: border-box; font-family: -apple-system, system-ui, sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: var(--text); margin: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
         
-        .telemetry { background: #000; padding: 10px 15px; border-bottom: 1px solid #1a1a1a; display: flex; justify-content: space-between; font-size: 0.55em; color: var(--dim); }
-        .telemetry b { color: var(--green); }
-
+        .telemetry { background: #000; padding: 10px 15px; border-bottom: 1px solid #1a1a1a; display: flex; justify-content: space-between; font-size: 0.55em; color: var(--dim); letter-spacing: 1px; }
         header { padding: 15px 20px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; background: #050505; }
         .pill { font-size: 0.5em; padding: 4px 10px; border-radius: 20px; border: 1px solid var(--blue); color: var(--blue); font-weight: bold; }
 
@@ -23,66 +21,64 @@
         .label { font-size: 0.55em; color: var(--dim); text-transform: uppercase; margin-bottom: 5px; }
         .val-main { font-size: 1.8em; font-weight: 900; }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th { text-align: left; font-size: 0.5em; color: var(--dim); padding: 8px; border-bottom: 1px solid #222; }
-        td { padding: 12px 8px; border-bottom: 1px solid #111; font-size: 0.75em; }
-        .up { color: var(--green); } .down { color: var(--red); }
+        .btn { width: 100%; padding: 16px; border-radius: 12px; border: none; font-weight: 900; margin-top: 10px; cursor: pointer; text-transform: uppercase; }
+        .btn-apple { background: #fff; color: #000; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-pix { background: #32bcad; color: #fff; }
 
         nav { background: #000; border-top: 1px solid #222; display: flex; position: fixed; bottom: 0; width: 100%; padding-bottom: env(safe-area-inset-bottom); }
-        .nav-item { flex: 1; padding: 15px; text-align: center; font-size: 0.55em; color: var(--dim); cursor: pointer; text-transform: uppercase; font-weight: bold; }
+        .nav-item { flex: 1; padding: 15px; text-align: center; font-size: 0.55em; color: #444; cursor: pointer; text-transform: uppercase; font-weight: bold; }
         .nav-item.active { color: var(--blue); border-top: 2px solid var(--blue); }
     </style>
 </head>
 <body>
 
     <div class="telemetry">
-        <span>ENTROPIA: <b id="entropy">99.98%</b></span>
-        <span>TPS: <b>421.1</b></span>
-        <span>NETWORK: <b style="color:var(--blue)">LATTICE_2500</b></span>
+        <span>SECURITY: <b style="color:var(--blue)">LATTICE_2500_PQC</b></span>
+        <span>TPS: <b style="color:var(--green)">5.000 (CACHE_SHARED)</b></span>
+        <span>LATENCY: <b id="ping">-- ms</b></span>
     </div>
 
     <header>
         <div style="font-weight:900; font-size:1.1em; color:var(--blue);">INC<span style="color:#fff">.NEXUS</span></div>
-        <div class="pill" id="net-status">SINCRONIZANDO...</div>
+        <div class="pill" id="net-status">OFFLINE</div>
     </header>
 
     <div id="viewport">
         <div id="pg-terminal" class="page active-page">
             <div class="card" style="border-left: 4px solid var(--blue);">
-                <div class="label">Tesouraria Coração da Rede (PQC)</div>
-                <div class="val-main" id="treasury-val">$ 75.283,03</div>
-                <div style="font-size:0.5em; color:var(--green); margin-top:5px;">● NÚCLEO ATIVO | <span id="block-count">128</span> BLOCOS</div>
+                <div class="label">Tesouraria Coração da Rede (v59)</div>
+                <div class="val-main" id="treasury-val">$ 0.00</div>
+                <div style="font-size:0.5em; color:var(--green); margin-top:5px;">● BLOCOS PROCESSADOS: <span id="block-count">0</span></div>
             </div>
 
-            <div class="label" style="margin-left:5px;">Mercado de Inteligência</div>
+            <div class="card">
+                <div class="label">Aporte de Liquidez (Comprar INC)</div>
+                <input type="number" id="buy-amt" placeholder="Valor em USD" style="width:100%; background:#111; border:1px solid #222; color:#fff; padding:15px; border-radius:12px; margin:10px 0;">
+                <button class="btn btn-apple"> Pay</button>
+                <button class="btn btn-pix">PIX Instantâneo</button>
+            </div>
+
+            <div class="label" style="margin-left:5px;">Inteligência de Mercado</div>
             <div class="card" style="padding:5px;">
-                <table>
-                    <thead><tr><th>#</th><th>Asset</th><th>Price</th><th>24h%</th></tr></thead>
-                    <tbody id="market-list">
-                        </tbody>
-                </table>
+                <table style="width:100%; border-collapse:collapse;" id="mkt-table">
+                    </table>
             </div>
         </div>
 
-        <div id="pg-cofre" class="page">
+        <div id="pg-vault" class="page">
             <div class="card" style="text-align:center;">
-                <div class="label">Grade de Soberania</div>
+                <div class="label">Sua Identidade Quântica</div>
                 <div style="background:#fff; width:150px; height:150px; margin:15px auto; border-radius:12px; display:flex; align-items:center; justify-content:center; border:4px solid var(--blue);">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=INC_SOBERANO" style="width:90%">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=INC_SOBERANO" style="width:90%">
                 </div>
-                <div style="font-family:monospace; font-size:0.6em; color:var(--blue);">ID: INC_6ZP0XG1CB</div>
-            </div>
-            <div class="card">
-                <div class="label">Ações de Rede</div>
-                <button style="width:100%; background:var(--blue); border:none; padding:15px; border-radius:10px; font-weight:bold; margin-bottom:10px;">ENVIAR INC</button>
-                <button style="width:100%; background:transparent; border:1px solid #333; color:#fff; padding:15px; border-radius:10px; font-weight:bold;">BACKUP LATTICE</button>
+                <div id="user-hash" style="font-size:0.5em; color:var(--blue); font-family:monospace;">---</div>
             </div>
         </div>
     </div>
 
     <nav>
         <div class="nav-item active" onclick="tab('pg-terminal', this)">Terminal</div>
-        <div class="nav-item" onclick="tab('pg-cofre', this)">Cofre</div>
+        <div class="nav-item" onclick="tab('pg-vault', this)">Cofre</div>
         <div class="nav-item" onclick="location.reload()">Sync</div>
     </nav>
 
@@ -94,35 +90,33 @@
             el.classList.add('active');
         }
 
-        async function updateData() {
+        async function update() {
+            const start = Date.now();
             try {
+                // Sincronia com o seu novo servidor.py (commit ad2bd28)
                 const res = await fetch(`${window.location.origin}/status`);
-                const status = await res.json();
-                document.getElementById('treasury-val').innerText = "$ " + status.tesouraria.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-                document.getElementById('block-count').innerText = status.blocos;
-                document.getElementById('net-status').innerText = "CONEXÃO_ESTABELECIDA";
+                const d = await res.json();
+                
+                document.getElementById('treasury-val').innerText = "$ " + d.tesouraria.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+                document.getElementById('block-count').innerText = d.blocos;
+                document.getElementById('ping').innerText = (Date.now() - start) + " ms";
+                document.getElementById('net-status').innerText = d.seguranca;
                 document.getElementById('net-status').style.color = "var(--green)";
-                document.getElementById('net-status').style.borderColor = "var(--green)";
-            } catch (e) {
-                document.getElementById('net-status').innerText = "CONTINGÊNCIA_ON";
-            }
 
-            try {
-                // Moedas: BTC, ETH, SOL, BNB, XRP
-                const resMkt = await fetch('https://api.binance.com/api/v3/ticker/24hr?symbols=["BTCUSDT","ETHUSDT","SOLUSDT","BNBUSDT","XRPUSDT"]');
-                const mkt = await resMkt.json();
-                let rows = `<tr><td>1</td><td><b>INC</b></td><td>$ 5.2910</td><td class="up">+0.52%</td></tr>`;
-                mkt.forEach((coin, i) => {
-                    const price = parseFloat(coin.lastPrice).toLocaleString('en-US', {minimumFractionDigits: 2});
-                    const change = parseFloat(coin.priceChangePercent);
-                    rows += `<tr><td>${i+2}</td><td><b>${coin.symbol.replace('USDT','')}</b></td><td>$ ${price}</td><td class="${change >= 0 ? 'up' : 'down'}">${change >= 0 ? '+' : ''}${change.toFixed(2)}%</td></tr>`;
+                // Puxa Mercado Global
+                const resM = await fetch('https://api.binance.com/api/v3/ticker/price?symbols=["BTCUSDT","ETHUSDT","SOLUSDT"]');
+                const mkt = await resM.json();
+                let rows = '';
+                mkt.forEach(c => {
+                    rows += `<tr><td style="padding:12px; font-size:0.8em;"><b>${c.symbol.replace('USDT','')}</b></td><td style="text-align:right; font-size:0.8em;">$ ${parseFloat(c.price).toLocaleString()}</td></tr>`;
                 });
-                document.getElementById('market-list').innerHTML = rows;
-            } catch (e) { console.log("Erro API Mercado"); }
+                document.getElementById('mkt-table').innerHTML = rows;
+
+            } catch (e) { document.getElementById('net-status').innerText = "LINK_OFF"; }
         }
 
-        setInterval(updateData, 5000);
-        window.onload = updateData;
+        setInterval(update, 5000);
+        window.onload = update;
     </script>
 </body>
 </html>
